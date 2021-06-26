@@ -1,22 +1,64 @@
 {
+  
+  "module": "commonjs",
+  
   "name": "bogo-server",
+  
   "version": "1.0.0",
+  
   "description": "",
+  
   "main": "index.js",
+  
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  
+    
+  "test": "echo \"Error: no test specified\" && exit 1"
+  
   },
+  
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jakewmiles/bogo-server.git"
+  
+    
+  "type": "git",
+  
+    
+  "url": "git+https://github.com/jakewmiles/bogo-server.git"
+  
   },
+  
   "author": "",
+  
   "license": "ISC",
+  
   "bugs": {
-    "url": "https://github.com/jakewmiles/bogo-server/issues"
+  
+    
+  "url": "https://github.com/jakewmiles/bogo-server/issues"
+  
   },
+  
   "homepage": "https://github.com/jakewmiles/bogo-server#readme",
+  
   "dependencies": {
-    "sequelize": "^6.6.2"
+  
+    
+  "cors": "^2.8.5",
+  
+    
+  "express": "^4.17.1",
+  
+    
+  "fs": "*",
+  
+    
+  "path": "^0.12.7",
+  
+    
+  "pg": "^8.6.0",
+  
+    
+  "sequelize": "^6.6.2"
+  
   }
 }
