@@ -3,9 +3,10 @@ const { gql } = require('apollo-server')
 const typeDefs = gql`
 
   type User{
+    id: ID!
     firstName: String!
     lastName: String!
-    dob: String!
+    age: Int!
     guide: Boolean!
     location: String!
     gender: Gender!
@@ -117,7 +118,7 @@ const typeDefs = gql`
     user(input: UserInput!): User! #edit user profile
     experiences(input: ExperienceInput!): Experience! #add or edit experiences associated with user profile
     userAlbums(input: PhotoInput!): Photo! #add or edit photos associated with user profile
-    messages(input: ChatInput!): Message! #add or edit messages associated with a chat
+    messages(input: MessageInput!): Message! #add or edit messages associated with a chat
     favorites(input: FavoriteInput!): User! #add or remove favorite
   }
 

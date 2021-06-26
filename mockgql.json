@@ -1,0 +1,146 @@
+mutation {
+  user (input: {
+    firstName: "Andy",
+    lastName: "A",
+    email: "andy@test.com",
+    dob: "1990-01-01",
+    password: "password",
+    guide: true,
+    location: "London",
+    gender: "MALE",
+    summary: "Test summary",
+    profileImg: "Test profileImg",
+    headerImg: "Test headerImg",
+  }) {
+    id
+    firstName
+    lastName
+    age
+    guide
+    location
+    gender
+    summary
+    profileImg
+    headerImg
+  }
+}
+
+mutation {
+  user (input: {
+    firstName: "Bobby",
+    lastName: "B",
+    email: "bobby@test.com",
+    dob: "1991-02-02",
+    password: "password",
+    guide: false,
+    location: "Lima",
+    gender: "MALE",
+    summary: "Test summary",
+    profileImg: "Test profileImg",
+    headerImg: "Test headerImg",
+  }) {
+    id
+    firstName
+    lastName
+    age
+    guide
+    location
+    gender
+    summary
+    profileImg
+    headerImg
+  }
+}
+
+mutation {
+  user (input: {
+    firstName: "Cady",
+    lastName: "C",
+    email: "cady@test.com",
+    dob: "1992-03-03",
+    password: "password",
+    guide: false,
+    location: "Portland",
+    gender: "FEMALE",
+    summary: "Test summary",
+    profileImg: "Test profileImg",
+    headerImg: "Test headerImg",
+  }) {
+    id
+    firstName
+    lastName
+    age
+    guide
+    location
+    gender
+    summary
+    profileImg
+    headerImg
+  }
+}
+
+mutation {
+  experiences (input: {
+    userId: "TBD",
+    title: "Experience title",
+    description: "Experience description"
+  }) {
+    id
+    userId
+    title
+    description
+  }
+}
+
+mutation {
+  experiences (input: {
+    userId: "TBD",
+    title: "Experience title 2",
+    description: "Experience description 2"
+  }) {
+    id
+    userId
+    title
+    description
+  }
+}
+
+mutation {
+  userAlbums (input: {
+    userId: "TBD",
+    photo: "test photo"
+  }) {
+    userId
+    imageUrl
+  }
+}
+
+mutation {
+  messages (input: {
+    favoriteId: "TBD"
+    userId: "TBD"
+    content: "Test message 1"
+  }) {
+    id
+    chatId
+    userId
+    content
+  }
+}
+
+mutation {
+  favorites (input: {
+    userId: "TBD",
+  }) {
+    id
+    firstName
+    lastName
+    age
+    guide
+    location
+    gender
+    summary
+    profileImg
+    headerImg
+  }
+}
