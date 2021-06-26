@@ -3,12 +3,9 @@ const { gql } = require('apollo-server')
 const typeDefs = gql`
 
   type User{
-    id: ID!
     firstName: String!
     lastName: String!
-    email: String!
     dob: String!
-    password: String!
     guide: Boolean!
     location: String!
     gender: Gender!
@@ -72,8 +69,31 @@ const typeDefs = gql`
     headerImg: String
   }
 
-  input ChatInput {
-    id: Int!
+  input UsersInput {
+    location: String!
+    interests: [Interest]
+  }
+
+  input ExperienceInput {
+    id: ID
+    userId: Int!
+    title: String
+    description: String
+  }
+
+  input PhotoInput {
+    photo: String!
+    userId: Int!
+  }
+
+  input MessageInput {
+    favoriteId: Int!
+    userId: Int!
+    content: String!
+  }
+
+  input FavoriteInput {
+    id: Int
     userId: Int!
   }
 
@@ -84,21 +104,21 @@ const typeDefs = gql`
 
   type Query {
     user(input: LoginInput!): User! #login user
-    users(input: UserInput!): [User]! #retrive list of cards
+    users(input: UsersInput!): [User]! #retrive list of cards
     languages: [Language]! #language selection when making profile
     interests: [Interest]! #interest selection when making profile
     favorites(input: UserInput!): [Favorite]! #get list of chats when clicking faves tab
     experiences(input: UserInput!): [Experience]! #get list of experiences when looking at a user profile
     userAlbums(input: UserInput!): [Photo]! #get photos when looking at a user profile
-    messages(input: ChatInput!): [Message]! #get messages when opening a chat
+    messages(input: MessageInput!): [Message]! #get messages when opening a chat
   }
 
   type Mutation {
     user(input: UserInput!): User! #edit user profile
-    experiences(input: UserInput!): Experience! #add or edit experiences associated with user profile
-    userAlbums(input: UserInput!): Photo! #add or edit photos associated with user profile
+    experiences(input: ExperienceInput!): Experience! #add or edit experiences associated with user profile
+    userAlbums(input: PhotoInput!): Photo! #add or edit photos associated with user profile
     messages(input: ChatInput!): Message! #add or edit messages associated with a chat
-    favorites(input: UserInput!): User! #add or remove favorite
+    favorites(input: FavoriteInput!): User! #add or remove favorite
   }
 
 `;
