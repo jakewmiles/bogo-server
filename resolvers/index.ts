@@ -37,6 +37,8 @@ module.exports = {
     user(_, { input }, { db }) {
       if (!input.email) {
         //delete user from db by ID
+      } else if (!input.id) {
+        // create user
       } else {
         // edit user row in db based on input (create or edit function)
       }
