@@ -5,11 +5,13 @@
 
 module.exports = {
   Query: {
-    pets(_, { input }, { models }) {
-      models.Pet.findMany({ type: input.type });
-    },
-    pet(_, { input }, { models }) {
-      models.Pet.findOne({ id: input.id })
+
+    user(_, { input }, { test }) {
+      return 1;
+
     }
+  },
+  Mutation: {
+
   }
 }
