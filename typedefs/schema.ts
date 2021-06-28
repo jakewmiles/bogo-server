@@ -110,7 +110,7 @@ const typedefs = gql`
 
   type Query {
     user(input: LoginInput!): User! #login user
-    users(input: UsersInput!): [User]! #retrive list of cards
+    users(input: UsersInput): [User]! #retrive list of cards
     languages: [Language]! #language selection when making profile
     interests: [Interest]! #interest selection when making profile
     favorites(input: UserInput!): [Favorite]! #get list of chats when clicking faves tab

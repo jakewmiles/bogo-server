@@ -1,10 +1,11 @@
 module.exports = {
   Query: {
-    user(_, { input }, { db }) {
-      // user = get user details from db using logininput
-      // return user;
+    async user(_, { input }, { db }) {
+
     },
-    users(_, { input }, { db }) {
+    async users(_, { input }, { db }) {
+      const users = await db.User.findAll();
+      return users 
       // users = get users array from db using location and interests in input
       // return users;
     },
@@ -34,13 +35,37 @@ module.exports = {
     }
   },
   Mutation: {
-    user(_, { input }, { db }) {
+     async user(_, { input }, { db }) {
       if (!input.id) {
-        // create user
+        const user = await  db.User.create({firstName: input.firstName,
+        lastName: input.lastName,
+        email: input.email,
+        dob: input.dob,
+        password: input.password,
+        guide: input.guide,
+        location: input.location,
+        gender: input.gender,
+        summary: input.summary,
+        profileImg: input.profileImg,
+        headerImg: input.headerImg,})
+        return user
+        
       } else if (!input.email) {
-        //delete user from db by ID
+        const user = await db.User.destroy({where:{id: input.id}})
+        return user
       } else {
-        // edit user row in db based on input (create or edit function)
+        const user = await db.User.update({firstName: input.firstName,
+          lastName: input.lastName,
+          email: input.email,
+          dob: input.dob,
+          password: input.password,
+          guide: input.guide,
+          location: input.location,
+          gender: input.gender,
+          summary: input.summary,
+          profileImg: input.profileImg,
+          headerImg: input.headerImg,}, {where: {id: input.id}})
+        return user
       }
       // return user;
     },
