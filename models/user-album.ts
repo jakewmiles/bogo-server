@@ -1,7 +1,6 @@
 import { BuildOptions, DataTypes, Model, Sequelize } from 'sequelize';
 
 export interface UserAlbumAttributes {
-  id: number;
   imageURL:string
 }
 
@@ -14,11 +13,6 @@ export type UserAlbumStatic = typeof Model & {
 
 export function UserAlbumFactory (sequelize:Sequelize) {
   return <UserAlbumStatic>sequelize.define('userAlbum', {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
-    },
     imageURL: {
       type: DataTypes.STRING(200),
       allowNull: false,

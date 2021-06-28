@@ -1,7 +1,6 @@
 import { BuildOptions, DataTypes, Model, Sequelize } from 'sequelize';
 
 export interface LanguageAttributes {
-  id: number;
   name: string;
 }
 
@@ -14,11 +13,6 @@ export type LanguageStatic = typeof Model & {
 
 export function LanguageFactory (sequelize:Sequelize) {
   return <LanguageStatic>sequelize.define('language', {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
-    },
     name: {
       type: DataTypes.STRING(50),
       allowNull: false,

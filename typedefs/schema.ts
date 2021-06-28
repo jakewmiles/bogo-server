@@ -27,8 +27,8 @@ const typedefs = gql`
 
   type Favorite {
     id: ID!
-    user1: Int!
-    user2: Int!
+    favouriteId: Int!
+    user1Id: Int!
   }
 
   type Message {
@@ -88,6 +88,7 @@ const typedefs = gql`
   }
 
   input PhotoInput {
+    id:Int
     photo: String!
     userId: Int!
   }
@@ -100,7 +101,8 @@ const typedefs = gql`
 
   input FavoriteInput {
     id: Int
-    userId: Int!
+    favoriteId: Int!
+    user1ID: Int!
   }
 
   enum Gender {

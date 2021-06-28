@@ -25,7 +25,7 @@ export function MessagesFactory (sequelize:Sequelize) {
       type: DataTypes.STRING(50),
       allowNull: false,
     },
-    description: {
+    content: {
       type: DataTypes.STRING(200),
       allowNull: false,
     }

@@ -2,7 +2,7 @@ import { BuildOptions, DataTypes, Model, Sequelize } from 'sequelize';
 
 
 export interface FavoritesAttributes {
-  id: number;
+  user1Id:string;
 }
 
 export interface FavoritesModel extends Model<FavoritesAttributes>, FavoritesAttributes {}
@@ -14,10 +14,8 @@ export type FavoritesStatic = typeof Model & {
 
 export function FavoritesFactory (sequelize:Sequelize) {
   return <FavoritesStatic>sequelize.define('favorites', {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+    user1Id: {
+      type: DataTypes.STRING,
     },
   })
 }
