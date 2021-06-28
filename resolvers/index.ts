@@ -2,35 +2,35 @@ module.exports = {
   Query: {
     user(_, { input }, { db }) {
       // user = get user details from db using logininput
-      return user;
+      // return user;
     },
     users(_, { input }, { db }) {
       // users = get users array from db using location and interests in input
-      return users;
+      // return users;
     },
     languages(_, __, { db }) {
       // get array of languages from db
-      return languages;
+      // return languages;
     },
     interests(_, __, { db }) {
       // get array of interests from db
-      return interests;
+      // return interests;
     },
     favorites(_, { input }, { db }) {
       // get list of favourites based on user id from input
-      return favorites;
+      // return favorites;
     },
     experiences(_, { input }, { db }) {
       // get list of experiences based on user id from input
-      return experiences;
+      // return experiences;
     },
     userAlbums(_, { input }, { db }) {
       // get list of photos based on user id from input
-      return photos;
+      // return photos;
     },
     messages(_, { input }, { db }) {
       // get list of photos based on favourite id from input
-      return messages;
+      // return messages;
     }
   },
   Mutation: {
@@ -42,7 +42,7 @@ module.exports = {
       } else {
         // edit user row in db based on input (create or edit function)
       }
-      return user;
+      // return user;
     },
     experiences(_, { input }, { db }) {
       if (!input.id) {
@@ -52,21 +52,20 @@ module.exports = {
       } else {
         //edit experience in experiences tables
       }
-      return experiences;
+      // return experiences;
     },
     userAlbums(_, { input }, { db }) {
       //photo = check if photo already exists in user album from db
-      if (photo) {
-        //delete photo
-      } else {
-        // create photo
-      }
-      return photo;
-
+      // if (photo) {
+      //delete photo
+      // } else {
+      // create photo
     },
+    // return photo;
+
     messages(_, { input }, { db }) {
       // add message to db using input
-      return message;
+      // return message;
     },
     favorites(_, { input }, { db }) {
       if (input.id) {
@@ -74,7 +73,7 @@ module.exports = {
       } else {
         // add to favorites
       }
-      return favorites;
+      // return favorites;
     }
   }
 }

@@ -1,6 +1,6 @@
-const { gql } = require('apollo-server')
+const { gql } = require('apollo-server');
 
-const typeDefs = gql`
+const typedefs = gql`
 
   type User{
     id: ID!
@@ -72,7 +72,12 @@ const typeDefs = gql`
 
   input UsersInput {
     location: String!
-    interests: [Interest]
+    interests: [InterestInput]
+  }
+
+  input InterestInput {
+    id: ID!
+    name: String!
   }
 
   input ExperienceInput {
@@ -124,4 +129,4 @@ const typeDefs = gql`
 
 `;
 
-module.exports = typeDefs
+module.exports = typedefs

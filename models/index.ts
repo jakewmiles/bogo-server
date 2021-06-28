@@ -1,40 +1,40 @@
-import { Sequelize } from 'sequelize';
-import { UserFactory, UserStatic } from './user'
-import { LanguageFactory, LanguageStatic } from './languages'
-import { FavoritesFactory, FavoritesStatic } from './favorites';
-import { ExperiencesFactory, ExperiencesStatic } from './experiences';
-import { InterestsFactory, InterestsStatic } from './interests';
-import { UserAlbumFactory, UserAlbumStatic } from './user-album';
-import { MessagesFactory,  MessagesStatic } from './messages';
+const { Sequelize } = require('sequelize');
+const { UserFactory, UserStatic } = require('./user')
+const { LanguageFactory, LanguageStatic } = require('./languages')
+const { FavoritesFactory, FavoritesStatic } = require('./favorites')
+const { ExperiencesFactory, ExperiencesStatic } = require('./experiences')
+const { InterestsFactory, InterestsStatic } = require('./interests')
+const { UserAlbumFactory, UserAlbumStatic } = require('./user-album')
+const { MessagesFactory, MessagesStatic } = require('./messages')
 
 
 
-export interface DB {
-  sequelize: Sequelize;
-  User: UserStatic;
-  Language: LanguageStatic;
-  Favorites: FavoritesStatic;
-  Experiences: ExperiencesStatic;
-  Interests: InterestsStatic;
-  UserAlbum: UserAlbumStatic;
-  Messages: MessagesStatic;
+// type DB = {
+//   sequelize: typeof Sequelize;
+//   User: typeof UserStatic;
+//   Language: typeof LanguageStatic;
+//   Favorites: typeof FavoritesStatic;
+//   Experiences: typeof ExperiencesStatic;
+//   Interests: typeof InterestsStatic;
+//   UserAlbum: typeof UserAlbumStatic;
+//   Messages: typeof MessagesStatic;
 
-}
+// }
 
-export const sequelize = new Sequelize(
+const sequelize = new Sequelize(
   (process.env.DB_NAME = "bogo"),
   (process.env.DB_USER = "postgres"),
   (process.env.DB_PASSWORD = ""),
   {
-      port: Number(process.env.DB_PORT) || 5432,
-      host: process.env.DB_HOST || "localhost",
-      dialect: "postgres",
-      pool: {
-          min: 0,
-          max: 5,
-          acquire: 30000,
-          idle: 10000,
-      },
+    port: Number(process.env.DB_PORT) || 5432,
+    host: process.env.DB_HOST || "localhost",
+    dialect: "postgres",
+    pool: {
+      min: 0,
+      max: 5,
+      acquire: 30000,
+      idle: 10000,
+    },
   }
 );
 
@@ -49,13 +49,13 @@ const Messages = MessagesFactory(sequelize)
 User.hasMany(Experiences)
 User.hasMany(UserAlbum)
 Favorites.hasMany(Messages)
-Experiences.belongsToMany(Interests, {through: 'experiences_interests'})
-User.belongsToMany(Language, { through: 'user_language'})
-User.belongsToMany(Interests, {through: 'user_interests'})
+Experiences.belongsToMany(Interests, { through: 'experiences_interests' })
+User.belongsToMany(Language, { through: 'user_language' })
+User.belongsToMany(Interests, { through: 'user_interests' })
 // User.belongsToMany(User, {through: 'Favourites'})
 
 
-export const db: DB = {
+let DB = {
   sequelize,
   User,
   Language,
@@ -65,3 +65,5 @@ export const db: DB = {
   UserAlbum,
   Messages,
 };
+
+module.exports = DB;
