@@ -1,10 +1,8 @@
 module.exports = {
     Query: {
-        user: function (_, _a, _b) {
+        async user: function (_, _a, _b) {
             var input = _a.input;
             var db = _b.db;
-            // user = get user details from db using logininput
-            // return user;
         },
         users: function (_, _a, _b) {
             var input = _a.input;
@@ -48,11 +46,11 @@ module.exports = {
         }
     },
     Mutation: {
-        user: function (_, _a, _b) {
+        async user: function (_, _a, _b) {
             var input = _a.input;
             var db = _b.db;
             if (!input.id) {
-                // create user
+            
             }
             else if (!input.email) {
                 //delete user from db by ID

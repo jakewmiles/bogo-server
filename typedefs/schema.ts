@@ -27,8 +27,8 @@ const typedefs = gql`
 
   type Favorite {
     id: ID!
-    user1: Int!
-    user2: Int!
+    favouriteId: Int!
+    user1Id: Int!
   }
 
   type Message {
@@ -88,6 +88,7 @@ const typedefs = gql`
   }
 
   input PhotoInput {
+    id:Int
     photo: String!
     userId: Int!
   }
@@ -100,7 +101,8 @@ const typedefs = gql`
 
   input FavoriteInput {
     id: Int
-    userId: Int!
+    favoriteId: Int!
+    user1ID: Int!
   }
 
   enum Gender {
@@ -110,7 +112,7 @@ const typedefs = gql`
 
   type Query {
     user(input: LoginInput!): User! #login user
-    users(input: UsersInput!): [User]! #retrive list of cards
+    users(input: UsersInput): [User]! #retrive list of cards
     languages: [Language]! #language selection when making profile
     interests: [Interest]! #interest selection when making profile
     favorites(input: UserInput!): [Favorite]! #get list of chats when clicking faves tab

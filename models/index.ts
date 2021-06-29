@@ -48,11 +48,11 @@ const Messages = MessagesFactory(sequelize)
 
 User.hasMany(Experiences)
 User.hasMany(UserAlbum)
+User.hasMany(Favorites)
 Favorites.hasMany(Messages)
-Experiences.belongsToMany(Interests, { through: 'experiences_interests' })
 User.belongsToMany(Language, { through: 'user_language' })
 User.belongsToMany(Interests, { through: 'user_interests' })
-// User.belongsToMany(User, {through: 'Favourites'})
+Experiences.belongsToMany(Interests, { through: 'experiences_interests' })
 
 
 let DB = {

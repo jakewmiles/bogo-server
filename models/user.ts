@@ -29,15 +29,12 @@ export function UserFactory (sequelize: Sequelize) {
         },
         firstName: {
           type: DataTypes.STRING(50),
-          allowNull: false,
         },
         dob: {
           type: DataTypes.STRING(50),
-          allowNull: false,
         },
         lastName: {
           type: DataTypes.STRING(50),
-          allowNull: false,
         },
         password: {
           type: DataTypes.STRING(100),
