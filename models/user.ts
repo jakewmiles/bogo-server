@@ -38,7 +38,6 @@ export function UserFactory (sequelize: Sequelize) {
         },
         password: {
           type: DataTypes.STRING(100),
-          allowNull: false,
         },
         guide: {
           type: DataTypes.BOOLEAN,

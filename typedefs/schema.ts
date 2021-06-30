@@ -127,6 +127,8 @@ const typedefs = gql`
     userAlbums(input: PhotoInput!): Photo! #add or edit photos associated with user profile
     messages(input: MessageInput!): Message! #add or edit messages associated with a chat
     favorites(input: FavoriteInput!): User! #add or remove favorite
+    bulkCreateInterests: [Interest]!
+    languages:[Language]!
   }
 
 `;

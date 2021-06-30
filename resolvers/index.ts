@@ -5,8 +5,9 @@ module.exports = {
       return user
 
     },
-    async users(_, { input }, { db }) {
-      const users = await db.User.findAll({ where: { location: input.location, interest: input.interest}});
+    users(_, { input }, { db }) {
+      const users = db.User.findAll()
+        //{ where: { location: input.location, interest: input.interest}}
       return users 
       // users = get users array from db using location and interests in input
       // return users;
@@ -43,7 +44,7 @@ module.exports = {
       // return photos;
     },
     async messages(_, { input }, { db }) {
-      const messages = await db.Messages.findALl({where: {favoriteId: input.id}})
+      const messages = await db.Messages.findAll({where: {favoriteId: input.id}})
       return messages
       // get list of photos based on favourite id from input
       // return messages;
@@ -125,6 +126,7 @@ module.exports = {
     async favorites(_, { input }, { db }) {
       if (input.id) {
         const favorites = await db.Favorites.destroy({where:{id: input.id}})
+        return favorites
         // remove from favorite
       } else {
         // add to favorites
@@ -132,6 +134,21 @@ module.exports = {
         return favorite
       }
       // return favorites;
+    },
+    async languages(_, { input }, { db }) {
+      if (input.id) {
+        const languages = await db.Languages.destroy({where:{id: input.id}})
+        // remove from favorite
+        return languages
+      } else {
+        // add to favorites
+        const language = await db.Langauges.create({userId: input.UserId, name: input.name})
+        return language
+      }
+    },
+    async bulkCreateInterests(_,__, { db }) {
+      const bulkInterests = await db.Interests.bulkCreate([{name:"rock-climbing"}, {name:"skiing"}])
+      return bulkInterests
     }
   }
 }
