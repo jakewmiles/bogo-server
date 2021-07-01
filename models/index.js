@@ -16,7 +16,7 @@ var _g = require('./messages'), MessagesFactory = _g.MessagesFactory, MessagesSt
 //   UserAlbum: typeof UserAlbumStatic;
 //   Messages: typeof MessagesStatic;
 // }
-var sequelize = new Sequelize((process.env.DB_NAME = "bogo"), (process.env.DB_USER = "postgres"), (process.env.DB_PASSWORD = ""), {
+var sequelize = new Sequelize((process.env.DB_NAME = "bogo"), (process.env.DB_USER = "postgres"), (process.env.DB_PASSWORD = "postgres"), {
     port: Number(process.env.DB_PORT) || 5432,
     host: process.env.DB_HOST || "localhost",
     dialect: "postgres",
@@ -36,11 +36,11 @@ var UserAlbum = UserAlbumFactory(sequelize);
 var Messages = MessagesFactory(sequelize);
 User.hasMany(Experiences);
 User.hasMany(UserAlbum);
+User.hasMany(Favorites);
 Favorites.hasMany(Messages);
-Experiences.belongsToMany(Interests, { through: 'experiences_interests' });
 User.belongsToMany(Language, { through: 'user_language' });
 User.belongsToMany(Interests, { through: 'user_interests' });
-// User.belongsToMany(User, {through: 'Favourites'})
+Experiences.belongsToMany(Interests, { through: 'experiences_interests' });
 var DB = {
     sequelize: sequelize,
     User: User,

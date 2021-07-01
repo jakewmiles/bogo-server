@@ -28,11 +28,6 @@ exports.Language = Language;
 ;
 function LanguageFactory(sequelize) {
     return sequelize.define('language', {
-        id: {
-            type: sequelize_1.DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
-        },
         name: {
             type: sequelize_1.DataTypes.STRING(50),
             allowNull: false,

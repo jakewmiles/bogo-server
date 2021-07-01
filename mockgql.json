@@ -2,26 +2,50 @@ mutation {
   user (input: {
     firstName: "Andy",
     lastName: "A",
-    email: "andy@test.com",
+    email: "jake@test.com",
     dob: "1990-01-01",
     password: "password",
     guide: true,
-    location: "London",
-    gender: "MALE",
+    city: "London",
+    country: "England",
+    gender: MALE,
     summary: "Test summary",
     profileImg: "Test profileImg",
-    headerImg: "Test headerImg",
+    filterCity: "Madrid",
+    languages: [
+      "2",
+      "3"
+    ],
+    interests: [
+      "2",
+      "3"
+    ],
+    favorites: []
   }) {
     id
     firstName
     lastName
-    age
+    dob
     guide
-    location
+    city
+    country
     gender
     summary
     profileImg
-    headerImg
+    filterCity
+    languages {
+      id
+      name
+    }
+    interests {
+      id
+      name
+    }
+    favorites {
+      id
+      userId
+      user1Id
+    }
   }
 }
 
@@ -33,22 +57,25 @@ mutation {
     dob: "1991-02-02",
     password: "password",
     guide: false,
-    location: "Lima",
-    gender: "MALE",
+    city: "Lima",
+    country: "Peru",
+    gender: MALE,
     summary: "Test summary",
     profileImg: "Test profileImg",
-    headerImg: "Test headerImg",
+    filterCity: "Madrid",
   }) {
     id
     firstName
     lastName
-    age
+    dob
     guide
-    location
+    city
+    country
     gender
     summary
     profileImg
     headerImg
+    filterCity
   }
 }
 
@@ -60,22 +87,26 @@ mutation {
     dob: "1992-03-03",
     password: "password",
     guide: false,
-    location: "Portland",
-    gender: "FEMALE",
+    city: "Portland",
+    country: "USA"
+    gender: FEMALE,
     summary: "Test summary",
     profileImg: "Test profileImg",
     headerImg: "Test headerImg",
+    filterCity: "Madrid",
   }) {
     id
     firstName
     lastName
-    age
+    dob
     guide
-    location
+    city
+    country
     gender
     summary
     profileImg
     headerImg
+    filterCity
   }
 }
 
@@ -130,17 +161,51 @@ mutation {
 
 mutation {
   favorites (input: {
-    userId: "TBD",
+    favoriteId: "1"
+    user1Id: "2",
   }) {
     id
-    firstName
-    lastName
-    age
-    guide
-    location
-    gender
-    summary
-    profileImg
-    headerImg
+    userId
+    user1Id
+  }
+}
+
+{ user(input: {
+  email: "andy@test.com"
+  password: "password"
+  }) {
+  firstName
+  id
+  }
+}
+
+{ user(input: {
+  email: "jake@test.com"
+  password: "password"
+  }) {
+  id
+  firstName
+  lastName
+  dob
+  guide
+  city
+  country
+  gender
+  summary
+  profileImg
+  filterCity
+  languages {
+    id
+    name
+    }
+  interests {
+    id
+    name
+    }
+  favorites {
+    id
+    userId
+    user1Id
+    }
   }
 }

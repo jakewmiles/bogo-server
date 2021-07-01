@@ -28,11 +28,6 @@ exports.UserAlbum = UserAlbum;
 ;
 function UserAlbumFactory(sequelize) {
     return sequelize.define('userAlbum', {
-        id: {
-            type: sequelize_1.DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
-        },
         imageURL: {
             type: sequelize_1.DataTypes.STRING(200),
             allowNull: false

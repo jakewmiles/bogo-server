@@ -37,7 +37,7 @@ function MessagesFactory(sequelize) {
             type: sequelize_1.DataTypes.STRING(50),
             allowNull: false
         },
-        description: {
+        content: {
             type: sequelize_1.DataTypes.STRING(200),
             allowNull: false
         }

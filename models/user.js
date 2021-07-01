@@ -33,20 +33,16 @@ function UserFactory(sequelize) {
             unique: true
         },
         firstName: {
-            type: sequelize_1.DataTypes.STRING(50),
-            allowNull: false
+            type: sequelize_1.DataTypes.STRING(50)
         },
         dob: {
-            type: sequelize_1.DataTypes.STRING(50),
-            allowNull: false
+            type: sequelize_1.DataTypes.STRING(50)
         },
         lastName: {
-            type: sequelize_1.DataTypes.STRING(50),
-            allowNull: false
+            type: sequelize_1.DataTypes.STRING(50)
         },
         password: {
-            type: sequelize_1.DataTypes.STRING(100),
-            allowNull: false
+            type: sequelize_1.DataTypes.STRING(100)
         },
         guide: {
             type: sequelize_1.DataTypes.BOOLEAN
@@ -57,13 +53,16 @@ function UserFactory(sequelize) {
         profileImg: {
             type: sequelize_1.DataTypes.STRING(200)
         },
-        headerImg: {
-            type: sequelize_1.DataTypes.STRING(200)
-        },
         gender: {
             type: sequelize_1.DataTypes.STRING(50)
         },
-        location: {
+        city: {
+            type: sequelize_1.DataTypes.STRING(50)
+        },
+        country: {
+            type: sequelize_1.DataTypes.STRING(50)
+        },
+        filterCity: {
             type: sequelize_1.DataTypes.STRING(50)
         }
     });
