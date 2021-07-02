@@ -69,7 +69,7 @@ const typedefs = gql`
     guide: Boolean
     city: String
     country: String
-    gender: Gender
+    gender: String
     summary: String
     profileImg: String
     filterCity: String
