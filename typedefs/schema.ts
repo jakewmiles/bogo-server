@@ -6,13 +6,17 @@ const typedefs = gql`
     id: ID!
     firstName: String!
     lastName: String!
-    age: Int!
+    dob: Int
     guide: Boolean!
-    location: String!
+    city: String!
+    country: String!
     gender: Gender!
     summary: String
     profileImg: String
-    headerImg: String
+    filterCity: String
+    languages: [Language]
+    interests: [Interest]
+    favorites: [Favorite]
   }
 
   type Language {
@@ -27,7 +31,7 @@ const typedefs = gql`
 
   type Favorite {
     id: ID!
-    favouriteId: Int!
+    userId: Int!
     user1Id: Int!
   }
 
@@ -63,15 +67,19 @@ const typedefs = gql`
     dob: String
     password: String
     guide: Boolean
-    location: String
+    city: String
+    country: String
     gender: Gender
     summary: String
     profileImg: String
-    headerImg: String
+    filterCity: String
+    languages: [String]
+    interests: [String]
+    favorites: [String]
   }
 
   input UsersInput {
-    location: String!
+    city: String!
     interests: [InterestInput]
   }
 
@@ -101,13 +109,14 @@ const typedefs = gql`
 
   input FavoriteInput {
     id: Int
-    favoriteId: Int!
-    user1ID: Int!
+    favoriteId: String
+    user1Id: String
   }
 
   enum Gender {
     MALE
     FEMALE
+    OTHER
   }
 
   type Query {
@@ -126,8 +135,10 @@ const typedefs = gql`
     experiences(input: ExperienceInput!): Experience! #add or edit experiences associated with user profile
     userAlbums(input: PhotoInput!): Photo! #add or edit photos associated with user profile
     messages(input: MessageInput!): Message! #add or edit messages associated with a chat
-    favorites(input: FavoriteInput!): User! #add or remove favorite
-    bulkCreateInterests: [Interest]!
+    favorites(input: FavoriteInput!): Favorite! #add or remove favorite
+    bulkCreateInterests: [Interest]
+    bulkCreateLanguages: User
+    bulkCreateFavorites: User
     languages:[Language]!
   }
 

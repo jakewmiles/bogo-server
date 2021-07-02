@@ -28,10 +28,8 @@ exports.Favorites = Favorites;
 ;
 function FavoritesFactory(sequelize) {
     return sequelize.define('favorites', {
-        id: {
-            type: sequelize_1.DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
+        user1Id: {
+            type: sequelize_1.DataTypes.STRING
         }
     });
 }
