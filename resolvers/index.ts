@@ -11,7 +11,7 @@ module.exports = {
         include: db.Language
       })
 
-      let languages: Array<{ id: String, name: String }> = [];
+      let languages = [];
 
       languagesArray.languages.forEach(language => {
         languages.push({
@@ -25,7 +25,7 @@ module.exports = {
         include: db.Interests
       })
 
-      let interests: Array<{ id: String, name: String }> = [];
+      let interests = [];
 
       interestsArray.interests.forEach(interest => {
         interests.push({
@@ -36,7 +36,7 @@ module.exports = {
 
       const favoritesInfoFromDb = await db.Favorites.findAll({ where: { user1Id: "51" } });
 
-      let favorites: Array<{ id: String, userId: String, user1Id: String }> = [];
+      let favorites = [];
 
       favoritesInfoFromDb.forEach(favorite => {
         favorites.push({
@@ -133,7 +133,7 @@ module.exports = {
           include: db.Language
         })
 
-        let languages: Array<{ id: String, name: String }> = [];
+        let languages = [];
 
         languagesArray.languages.forEach(language => {
           languages.push({
@@ -147,7 +147,7 @@ module.exports = {
           include: db.Interests
         })
 
-        let interests: Array<{ id: String, name: String }> = [];
+        let interests = [];
 
         interestsArray.interests.forEach(interest => {
           interests.push({
@@ -266,17 +266,17 @@ module.exports = {
   }
 }
 
-function calculateAgeFromBirthdate(birthdate: String): Number {
+function calculateAgeFromBirthdate(birthdate) {
   const currentTime = new Date();
-  const currentDay: number = currentTime.getDate();
-  const currentMonth: number = currentTime.getMonth() + 1;
-  const currentYear: number = currentTime.getFullYear();
+  const currentDay = currentTime.getDate();
+  const currentMonth = currentTime.getMonth() + 1;
+  const currentYear = currentTime.getFullYear();
 
-  const birthDay: number = Number(birthdate.slice(8, 10));
-  const birthMonth: number = Number(birthdate.slice(5, 7));
-  const birthYear: number = Number(birthdate.slice(0, 4));
+  const birthDay = Number(birthdate.slice(8, 10));
+  const birthMonth = Number(birthdate.slice(5, 7));
+  const birthYear = Number(birthdate.slice(0, 4));
 
-  let postBirthdayInCurrentYear: number = 1;
+  let postBirthdayInCurrentYear = 1;
   if (birthMonth > currentMonth || birthMonth === currentMonth && birthDay > currentDay) postBirthdayInCurrentYear = 0;
 
   return currentYear - birthYear + postBirthdayInCurrentYear - 1;
