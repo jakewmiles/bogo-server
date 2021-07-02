@@ -4,13 +4,13 @@ const typedefs = gql`
 
   type User{
     id: ID!
-    firstName: String!
-    lastName: String!
+    firstName: String
+    lastName: String
     dob: Int
-    guide: Boolean!
-    city: String!
-    country: String!
-    gender: Gender!
+    guide: Boolean
+    city: String
+    country: String
+    gender: Gender
     summary: String
     profileImg: String
     filterCity: String
