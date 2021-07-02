@@ -183,9 +183,8 @@ module.exports = {
           profileImg: input.profileImg,
           filterCity: input.filterCity
         }, { where: { id: input.id } })
-        user.dataValues.dob = calculateAgeFromBirthdate(user.dataValues.dob);
 
-        return user
+        return { id: input.id }
       }
     },
     async experiences(_, { input }, { db }) {
