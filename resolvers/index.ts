@@ -34,17 +34,26 @@ module.exports = {
         })
       })
 
-      const favoritesInfoFromDb = await db.Favorites.findAll({ where: { user1Id: "51" } });
+      const idStr = user.dataValues.id.toString()
+
+      const favoritesInfoFromDb = await db.Favorites.findAll({ where: { user1Id: idStr } });
 
       let favorites = [];
 
-      favoritesInfoFromDb.forEach(favorite => {
+      
+      favoritesInfoFromDb.forEach(async favorite => {
+        const friend = db.User.findOne({where: {id: favorite.dataValues.userId}})
         favorites.push({
           id: favorite.dataValues.id,
           userId: favorite.dataValues.userId,
           user1Id: favorite.dataValues.user1Id,
+          profile: friend
+          // await db.User.findAll({ where: {id: favorite.dataValues.userId.toString()}})
         });
       })
+
+      console.log(favorites)
+
 
       user.dataValues.languages = languages;
       user.dataValues.interests = interests;

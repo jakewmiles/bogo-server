@@ -33,6 +33,7 @@ const typedefs = gql`
     id: ID!
     userId: Int!
     user1Id: Int!
+    profile: User
   }
 
   type Message {
