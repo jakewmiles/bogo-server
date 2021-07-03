@@ -3,7 +3,7 @@ const { gql } = require('apollo-server');
 const typedefs = gql`
 
   type User{
-    id: ID
+    id: ID!
     firstName: String
     lastName: String
     dob: Int
@@ -33,6 +33,7 @@ const typedefs = gql`
     id: ID!
     userId: Int!
     user1Id: Int!
+    profile: User
   }
 
   type Message {
