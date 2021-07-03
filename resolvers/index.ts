@@ -132,7 +132,7 @@ module.exports = {
       // return photos;
     },
     async messages(_, { input }, { db }) {
-      const messages = await db.Messages.findAll({ where: { chatId: input.id } })
+      const messages = await db.Messages.findAll({ where: { chatId: input.chatId } })
       return messages
       // get list of photos based on favourite id from input
       // return messages;
@@ -268,14 +268,30 @@ module.exports = {
 
     async messages(_, { input }, { db }) {
       // add message to db using input
-      const message = await db.Messages.create({
-        chatid: input.chatid,
-        userid: input.userid,
-        content: input.content
-      });
+      let message;
+        if (input.chatId) {
+           message = await db.Messages.create({
+            chatId: input.chatId,
+            authorId: input.senderId,
+            content: input.content
+          })
+        }
+        else { 
+          const chat = await db.Chats.create({
+            userId: input.recieverId,
+            user1Id:input.senderId,
+          })
 
-      return message;
+          const chatID = chat.dataValues.id.toString();
+          message = await db.Messages.create({
+            chatId: chatID,
+            authorId: input.senderId,
+            content: input.content
+          })
+        }
+        return message;
     },
+          
     async favorites(_, { input }, { db }) {
       if (input.id) {
         const favorites = await db.Favorites.destroy({ where: { id: input.id } })

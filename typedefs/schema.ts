@@ -40,7 +40,7 @@ const typedefs = gql`
   type Message {
     id: ID!
     chatId: Int!
-    userId: Int!
+    authorId: Int!
     content: String
   }
 
@@ -103,9 +103,10 @@ const typedefs = gql`
   }
 
   input MessageInput {
-    chatId: Int!
-    userId: Int!
-    content: String!
+    chatId: String
+    senderId:String
+    recieverId: String
+    content: String
   }
 
   input FavoriteInput {

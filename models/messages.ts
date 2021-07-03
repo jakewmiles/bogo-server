@@ -2,8 +2,7 @@ import { BuildOptions, DataTypes, Model, Sequelize } from 'sequelize';
 
 
 export interface MessagesAttributes {
-  id: number;
-  userid: string;
+  authorid: string;
   content: string;
 }
 
@@ -16,12 +15,7 @@ export type MessagesStatic = typeof Model & {
 
 export function MessagesFactory (sequelize:Sequelize) {
   return <MessagesStatic>sequelize.define('messages', {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
-    },
-    userid: {
+    authorId: {
       type: DataTypes.STRING(50),
       allowNull: false,
     },
