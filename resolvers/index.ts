@@ -57,12 +57,49 @@ module.exports = {
 
       return user.dataValues;
     },
-    users(_, { input }, { db }) {
-      const users = db.User.findAll({ where: { city: input.city } })
-      //{ where: { location: input.location, interest: input.interest}}
-      return users
-      // users = get users array from db using location and interests in input
-      // return users;
+    async users(_, { input }, { db }) {
+      const users = await db.User.findAll({ where: { city: input.city } })
+
+      const returnedUsers = [];
+
+      //using for loop instead of forEach as forEach does not work asynchronously
+      for (let i = 0; i < users.length; i++) {
+        users[i].dataValues.dob = calculateAgeFromBirthdate(users[i].dataValues.dob);
+        const languagesArray = await db.User.findOne({
+          where: { email: users[i].dataValues.email },
+          include: db.Language
+        })
+
+        let languages = [];
+
+        languagesArray.languages.forEach(language => {
+          languages.push({
+            id: language.dataValues.id,
+            name: language.dataValues.name,
+          })
+        })
+
+        const interestsArray = await db.User.findOne({
+          where: { email: users[i].dataValues.email },
+          include: db.Interests
+        })
+
+        let interests = [];
+
+        interestsArray.interests.forEach(interest => {
+          interests.push({
+            id: interest.dataValues.id,
+            name: interest.dataValues.name,
+          })
+        })
+
+        users[i].dataValues.languages = languages;
+        users[i].dataValues.interests = interests;
+
+        returnedUsers.push(users[i].dataValues);
+      }
+
+      return returnedUsers
     },
     async languages(_, __, { db }) {
       const langauges = await db.Language.findAll();
