@@ -36,28 +36,24 @@ module.exports = {
 
       const idStr = user.dataValues.id.toString()
 
-      const favoritesInfoFromDb = await db.Favorites.findAll({ where: { user1Id: idStr } });
+      const chatsList = await db.Chats.findAll({ where: { user1Id: idStr } });
 
-      let favorites = [];
+      let chats = [];
 
-      
-      favoritesInfoFromDb.forEach(async favorite => {
-        const friend = db.User.findOne({where: {id: favorite.dataValues.userId}})
-        favorites.push({
-          id: favorite.dataValues.id,
-          userId: favorite.dataValues.userId,
-          user1Id: favorite.dataValues.user1Id,
+
+      chatsList.forEach(async chat => {
+        const friend = db.User.findOne({ where: { id: chat.dataValues.userId } })
+        chats.push({
+          id: chat.dataValues.id,
+          userId: chat.dataValues.userId,
+          user1Id: chat.dataValues.user1Id,
           profile: friend
-          // await db.User.findAll({ where: {id: favorite.dataValues.userId.toString()}})
         });
       })
 
-      console.log(favorites)
-
-
       user.dataValues.languages = languages;
       user.dataValues.interests = interests;
-      user.dataValues.favorites = favorites;
+      user.dataValues.chats = chats;
 
       return user.dataValues;
     },
@@ -80,12 +76,11 @@ module.exports = {
       // get array of interests from db
       // return interests;
     },
-    async favorites(_, { input }, { db }) {
+    async chats(_, { input }, { db }) {
       // finds the friends based on the user1Id which will return the friends based on the foriegn key association
-      const favorites = await db.Favorites.findAll({ where: { user1Id: input.id } })
-      return favorites
-      // get list of favourites based on user id from input
-      // return favorites;
+      const chats = await db.Chats.findAll({ where: { user1Id: input.id } })
+      return chats
+      // get list of chats based on user id from input
     },
     async experiences(_, { input }, { db }) {
       // get list of experiences based on user id from input
@@ -100,7 +95,7 @@ module.exports = {
       // return photos;
     },
     async messages(_, { input }, { db }) {
-      const messages = await db.Messages.findAll({ where: { favoriteId: input.id } })
+      const messages = await db.Messages.findAll({ where: { chatId: input.id } })
       return messages
       // get list of photos based on favourite id from input
       // return messages;
@@ -167,7 +162,7 @@ module.exports = {
 
         user.dataValues.languages = languages;
         user.dataValues.interests = interests;
-        user.dataValues.favorites = [];
+        user.dataValues.chats = [];
 
         return user.dataValues
 
@@ -233,7 +228,7 @@ module.exports = {
     async messages(_, { input }, { db }) {
       // add message to db using input
       const message = await db.Messages.create({
-        favoriteid: input.favoriteid,
+        chatid: input.chatid,
         userid: input.userid,
         content: input.content
       });
@@ -255,10 +250,10 @@ module.exports = {
     async languages(_, { input }, { db }) {
       if (input.id) {
         const languages = await db.users_languages.destroy({ where: { id: input.id } })
-        // remove from favorite
+        // remove from languages
         return languages
       } else {
-        // add to favorites
+        // add to languages
         const language = await db.users_langauges.create({ userId: input.UserId, name: input.name })
         return language
       }

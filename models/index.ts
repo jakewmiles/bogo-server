@@ -1,6 +1,7 @@
 const { Sequelize } = require('sequelize');
 const { UserFactory, UserStatic } = require('./user')
 const { LanguageFactory, LanguageStatic } = require('./languages')
+const { ChatsFactory, ChatsStatic } = require('./chats')
 const { FavoritesFactory, FavoritesStatic } = require('./favorites')
 const { ExperiencesFactory, ExperiencesStatic } = require('./experiences')
 const { InterestsFactory, InterestsStatic } = require('./interests')
@@ -40,6 +41,7 @@ const sequelize = new Sequelize(
 
 const User = UserFactory(sequelize)
 const Language = LanguageFactory(sequelize)
+const Chats = ChatsFactory(sequelize)
 const Favorites = FavoritesFactory(sequelize)
 const Experiences = ExperiencesFactory(sequelize)
 const Interests = InterestsFactory(sequelize)
@@ -48,8 +50,9 @@ const Messages = MessagesFactory(sequelize)
 
 User.hasMany(Experiences)
 User.hasMany(UserAlbum)
+User.hasMany(Chats)
+Chats.hasMany(Messages)
 User.hasMany(Favorites)
-Favorites.hasMany(Messages)
 User.belongsToMany(Language, { through: 'user_language' })
 User.belongsToMany(Interests, { through: 'user_interests' })
 Experiences.belongsToMany(Interests, { through: 'experiences_interests' })
@@ -59,6 +62,7 @@ let DB = {
   sequelize,
   User,
   Language,
+  Chats,
   Favorites,
   Experiences,
   Interests,
