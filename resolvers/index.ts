@@ -162,12 +162,12 @@ module.exports = {
 
         return user.dataValues
 
-      } else if (!input.email) {
-        const user = await db.User.destroy({ where: { id: input.id } })
-        user.removeLanguage();
-        user.removeInterests();
-        user.dataValues.dob = calculateAgeFromBirthdate(user.dataValues.dob);
-        return user
+        // } else if (!input.email) {
+        //   const user = await db.User.destroy({ where: { id: input.id } })
+        //   user.removeLanguage();
+        //   user.removeInterests();
+        //   user.dataValues.dob = calculateAgeFromBirthdate(user.dataValues.dob);
+        //   return user
       } else {
         const user = await db.User.update({
           firstName: input.firstName,
@@ -183,7 +183,10 @@ module.exports = {
           profileImg: input.profileImg,
           filterCity: input.filterCity
         }, { where: { id: input.id } })
-        user.dataValues.dob = calculateAgeFromBirthdate(user.dataValues.dob);
+
+        if (input.dob) {
+          user.dataValues.dob = calculateAgeFromBirthdate(user.dataValues.dob);
+        }
 
         return user
       }
