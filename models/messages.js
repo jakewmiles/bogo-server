@@ -28,12 +28,7 @@ exports.Messages = Messages;
 ;
 function MessagesFactory(sequelize) {
     return sequelize.define('messages', {
-        id: {
-            type: sequelize_1.DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
-        },
-        userid: {
+        authorId: {
             type: sequelize_1.DataTypes.STRING(50),
             allowNull: false
         },
