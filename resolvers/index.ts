@@ -58,7 +58,7 @@ module.exports = {
       return user.dataValues;
     },
     users(_, { input }, { db }) {
-      const users = db.User.findAll()
+      const users = db.User.findAll({ where: { city: input.city } })
       //{ where: { location: input.location, interest: input.interest}}
       return users
       // users = get users array from db using location and interests in input
@@ -166,12 +166,12 @@ module.exports = {
 
         return user.dataValues
 
-      } else if (!input.email) {
-        const user = await db.User.destroy({ where: { id: input.id } })
-        user.removeLanguage();
-        user.removeInterests();
-        user.dataValues.dob = calculateAgeFromBirthdate(user.dataValues.dob);
-        return user
+        // } else if (!input.email) {
+        //   const user = await db.User.destroy({ where: { id: input.id } })
+        //   user.removeLanguage();
+        //   user.removeInterests();
+        //   user.dataValues.dob = calculateAgeFromBirthdate(user.dataValues.dob);
+        //   return user
       } else {
         const user = await db.User.update({
           firstName: input.firstName,
@@ -187,6 +187,10 @@ module.exports = {
           profileImg: input.profileImg,
           filterCity: input.filterCity
         }, { where: { id: input.id } })
+
+        if (input.dob) {
+          user.dataValues.dob = calculateAgeFromBirthdate(user.dataValues.dob);
+        }
 
         return { id: input.id }
       }
