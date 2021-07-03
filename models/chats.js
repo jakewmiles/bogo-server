@@ -15,22 +15,22 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-exports.FavoritesFactory = exports.Favorites = void 0;
+exports.ChatsFactory = exports.Chats = void 0;
 var sequelize_1 = require("sequelize");
-var Favorites = /** @class */ (function (_super) {
-    __extends(Favorites, _super);
-    function Favorites() {
+var Chats = /** @class */ (function (_super) {
+    __extends(Chats, _super);
+    function Chats() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    return Favorites;
+    return Chats;
 }(sequelize_1.Model));
-exports.Favorites = Favorites;
+exports.Chats = Chats;
 ;
-function FavoritesFactory(sequelize) {
-    return sequelize.define('favorites', {
-        activeUserId: {
+function ChatsFactory(sequelize) {
+    return sequelize.define('chats', {
+        user1Id: {
             type: sequelize_1.DataTypes.STRING
         }
     });
 }
-exports.FavoritesFactory = FavoritesFactory;
+exports.ChatsFactory = ChatsFactory;
