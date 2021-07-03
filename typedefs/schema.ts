@@ -82,7 +82,6 @@ const typedefs = gql`
 
   input UsersInput {
     city: String!
-    interests: [InterestInput]
   }
 
   input InterestInput {

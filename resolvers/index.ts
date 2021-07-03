@@ -58,7 +58,7 @@ module.exports = {
       return user.dataValues;
     },
     users(_, { input }, { db }) {
-      const users = db.User.findAll()
+      const users = db.User.findAll({ where: { city: input.city } })
       //{ where: { location: input.location, interest: input.interest}}
       return users
       // users = get users array from db using location and interests in input
