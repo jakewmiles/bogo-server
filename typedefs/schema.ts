@@ -81,6 +81,7 @@ const typedefs = gql`
   }
 
   input UsersInput {
+    activeUserId: String!
     city: String!
   }
 

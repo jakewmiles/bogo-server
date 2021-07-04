@@ -1,3 +1,5 @@
+const { Op } = require("sequelize");
+
 module.exports = {
   Query: {
     async user(_, { input }, { db }) {
@@ -69,6 +71,16 @@ module.exports = {
           where: { email: users[i].dataValues.email },
           include: db.Language
         })
+
+        //check whether this user has been favorited
+        const favorite = await db.Favorites.findOne({
+          where: { [Op.and]: [{ userId: users[i].dataValues.id }, { activeUserId: input.activeUserId }] }
+        })
+        if (favorite) {
+          users[i].dataValues.isFavorited = true;
+        } else {
+          users[i].dataValues.isFavorited = false;
+        }
 
         let languages = [];
 
@@ -269,40 +281,50 @@ module.exports = {
     async messages(_, { input }, { db }) {
       // add message to db using input
       let message;
-        if (input.chatId) {
-           message = await db.Messages.create({
-            chatId: input.chatId,
-            authorId: input.senderId,
-            content: input.content
-          })
-        }
-        else { 
-          const chat = await db.Chats.create({
-            userId: input.recieverId,
-            user1Id:input.senderId,
-          })
-
-          const chatID = chat.dataValues.id.toString();
-          message = await db.Messages.create({
-            chatId: chatID,
-            authorId: input.senderId,
-            content: input.content
-          })
-        }
-        return message;
-    },
-          
-    async favorites(_, { input }, { db }) {
-      if (input.id) {
-        const favorites = await db.Favorites.destroy({ where: { id: input.id } })
-        return favorites
-        // remove from favorite
-      } else {
-        // add to favorites
-        const favorite = await db.Favorites.create({ userId: input.favoriteId, user1Id: input.user1Id })
-        return favorite
+      if (input.chatId) {
+        message = await db.Messages.create({
+          chatId: input.chatId,
+          authorId: input.senderId,
+          content: input.content
+        })
       }
-      // return favorites;
+      else {
+        const chat = await db.Chats.create({
+          userId: input.recieverId,
+          user1Id: input.senderId,
+        })
+
+        const chatID = chat.dataValues.id.toString();
+        message = await db.Messages.create({
+          chatId: chatID,
+          authorId: input.senderId,
+          content: input.content
+        })
+      }
+      return message;
+    },
+
+    async favorites(_, { input }, { db }) {
+
+      const favorite = await db.Favorites.findOne({
+        where: { [Op.and]: [{ userId: input.targetUserId }, { activeUserId: input.userId }] }
+      })
+
+      //toggle favorites on or off - delete if it is found or create
+      if (favorite) {
+        await db.Favorites.destroy({
+          where: {
+            id: favorite.dataValues.id
+          }
+        })
+      } else {
+        await db.Favorites.create({
+          activeUserId: input.userId,
+          userId: input.targetUserId,
+        })
+      }
+
+      return;
     },
     async languages(_, { input }, { db }) {
       if (input.id) {
