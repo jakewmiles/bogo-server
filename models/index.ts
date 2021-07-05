@@ -24,7 +24,7 @@ const { MessagesFactory, MessagesStatic } = require('./messages')
 
 const sequelize = new Sequelize(
   (process.env.DB_NAME = "bogo"),
-  (process.env.DB_USER = "postgres"),
+  (process.env.DB_USER = "jakemiles"),
   (process.env.DB_PASSWORD = "postgres"),
   {
     port: Number(process.env.DB_PORT) || 5432,

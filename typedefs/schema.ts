@@ -13,6 +13,7 @@ const typedefs = gql`
     gender: Gender
     summary: String
     profileImg: String
+    userAlbum: [Photo]
     filterCity: String
     languages: [Language]
     interests: [Interest]
@@ -52,7 +53,7 @@ const typedefs = gql`
   }
 
   type Photo {
-    userId: Int!
+    photoId: ID!
     imageUrl: String!
   }
 
@@ -74,6 +75,7 @@ const typedefs = gql`
     gender: String
     summary: String
     profileImg: String
+    userAlbum: [String]
     filterCity: String
     languages: [String]
     interests: [String]
@@ -98,8 +100,7 @@ const typedefs = gql`
   }
 
   input PhotoInput {
-    id:Int
-    photo: String!
+    photos: [String]!
     userId: Int!
   }
 
@@ -135,7 +136,7 @@ const typedefs = gql`
   type Mutation {
     user(input: UserInput!): User! #edit user profile
     experiences(input: ExperienceInput!): Experience! #add or edit experiences associated with user profile
-    userAlbums(input: PhotoInput!): Photo! #add or edit photos associated with user profile
+    userAlbums(input: PhotoInput!): [Photo]! #add or edit photos associated with user profile
     messages(input: MessageInput!): Message! #add or edit messages associated with a chat
     favorites(input: FavoriteInput!): User #add or remove favorite
     bulkCreateInterests: [Interest]
