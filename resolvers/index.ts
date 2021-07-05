@@ -36,6 +36,20 @@ module.exports = {
         })
       })
 
+      const imagesArray = await db.User.findOne({
+        where: { email: user.dataValues.email },
+        include: db.UserAlbum
+      })
+
+      let images = [];
+
+      for (let i = 0; i < imagesArray.dataValues.userAlbums.length; i++) {
+        images.push({
+          photoId: imagesArray.dataValues.userAlbums[i].dataValues.id,
+          imageUrl: imagesArray.dataValues.userAlbums[i].dataValues.imageURL
+        })
+      }
+
       const idStr = user.dataValues.id.toString()
 
       const chatsList = await db.Chats.findAll({ where: { user1Id: idStr } });
@@ -56,6 +70,7 @@ module.exports = {
       user.dataValues.languages = languages;
       user.dataValues.interests = interests;
       user.dataValues.chats = chats;
+      user.dataValues.userAlbum = images; 
 
       return user.dataValues;
     },
@@ -105,12 +120,27 @@ module.exports = {
           })
         })
 
+        const imagesArray = await db.User.findOne({
+          where: { email: users[i].dataValues.email },
+          include: db.UserAlbum
+        })
+        
+        let images = [];
+  
+        for (let i = 0; i < imagesArray.dataValues.userAlbums.length; i++) {
+          images.push({
+            photoId: imagesArray.dataValues.userAlbums[i].dataValues.id,
+            imageUrl: imagesArray.dataValues.userAlbums[i].dataValues.imageURL
+          })
+        }
+
         users[i].dataValues.languages = languages;
         users[i].dataValues.interests = interests;
+        users[i].dataValues.userAlbum = images;
 
         returnedUsers.push(users[i].dataValues);
       }
-
+      
       return returnedUsers
     },
     async languages(_, __, { db }) {
@@ -181,6 +211,35 @@ module.exports = {
           await user.addInterests(input.interests[i], user.dataValues.id);
         }
 
+        // await input.userAlbum.forEach(async photo => await db.UserAlbum.create({
+        //   userId: user.dataValues.id,
+        //   imageURL: photo,
+        // }))
+
+        for (let i = 0; i < input.userAlbum.length; i++) {
+          let image = input.userAlbum[i];
+          await db.UserAlbum.create({
+            userId: user.dataValues.id,
+            imageURL: image,
+          })
+          
+        }
+
+        const imagesArray = await db.UserAlbum.findAll({
+          where: { userId: user.dataValues.id }
+        })
+
+
+        let images = [];
+
+        imagesArray.forEach(image => {
+          images.push({
+            photoId: image.dataValues.id,
+            imageUrl: image.dataValues.imageURL,
+          })
+        })
+        
+
         const languagesArray = await db.User.findOne({
           where: { email: user.dataValues.email },
           include: db.Language
@@ -211,7 +270,10 @@ module.exports = {
 
         user.dataValues.languages = languages;
         user.dataValues.interests = interests;
+        user.dataValues.userAlbum = images;
         user.dataValues.chats = [];
+
+        
 
         return user.dataValues
 
