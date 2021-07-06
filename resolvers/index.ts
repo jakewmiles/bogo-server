@@ -47,14 +47,14 @@ module.exports = {
       }
 
       const idStr = user.dataValues.id.toString()
-      const chatsList = await db.Chats.findAll({where: { [Op.or]:[{user1Id: idStr}, {userId: idStr}] } });
+      const chatsList = await db.Chats.findAll({ where: { [Op.or]: [{ user1Id: idStr }, { userId: idStr }] } });
 
       let chats = [];
       chatsList.forEach(async chat => {
         let id = chat.dataValues.userId.toString();
-        if (user.dataValues.id.toString() === chat.dataValues.userId.toString() ) id = chat.dataValues.user1Id        
+        if (user.dataValues.id.toString() === chat.dataValues.userId.toString()) id = chat.dataValues.user1Id
         console.log(chat.dataValues.userId.toString(), 'userid')
-        const friend = db.User.findOne({ where: {  id:id }})
+        const friend = db.User.findOne({ where: { id: id } })
         // .then((result) => console.log(result))
         chats.push({
           id: chat.dataValues.id,
@@ -153,7 +153,31 @@ module.exports = {
     async messages(_, { input }, { db }) {
       const messages = await db.Messages.findAll({ where: { chatId: input.chatId } })
       return messages
-    }
+    },
+    async reviews(_, { input }, { db }) {
+      const reviews = await db.Reviews.findAll({ where: { id: input.id } })
+
+      // get the info of the users who left the review
+
+      let returnedReviews = [];
+
+      for (let i = 0; i < reviews.length; i++) {
+        const author = await db.User.findOne({ where: { id: reviews[i].dataValues.authorId } })
+
+        returnedReviews.push({
+          id: reviews[i].dataValues.id,
+          rating: reviews[i].dataValues.rating,
+          content: reviews[i].dataValues.content,
+          profile: {
+            id: author.dataValues.id,
+            firstName: author.dataValues.firstName,
+            profileImg: author.dataValues.profileImg
+          }
+        });
+      }
+
+      return returnedReviews;
+    },
   },
   Mutation: {
     async user(_, { input }, { db }) {
@@ -307,6 +331,27 @@ module.exports = {
       }
       return;
     },
+    async reviews(_, { input }, { db }) {
+      const review = await db.Reviews.create({
+        userId: input.userId,
+        authorId: input.authorId,
+        rating: input.rating,
+        content: input.content
+      })
+
+      const author = await db.User.findOne({ where: { id: input.authorId } })
+
+      return {
+        id: review.dataValues.id,
+        rating: review.dataValues.rating,
+        content: review.dataValues.content,
+        profile: {
+          id: author.dataValues.id,
+          firstName: author.dataValues.firstName,
+          profileImg: author.dataValues.profileImg
+        }
+      }
+    },
     async bulkCreateInterests(_, __, { db }) {
       await db.Interests.bulkCreate([{ name: "Rock-climbing" }, { name: "Skiing" }, { name: "Singing" }, { name: "Cooking" }])
       return;
@@ -316,7 +361,7 @@ module.exports = {
       return;
     }
   },
- 
+
 }
 
 function calculateAgeFromBirthdate(birthdate) {

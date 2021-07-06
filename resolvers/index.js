@@ -34,7 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var Op = require("sequelize").Op;
+var Op = require('sequelize').Op;
 module.exports = {
     Query: {
         user: function (_, _a, _b) {
@@ -42,14 +42,15 @@ module.exports = {
             var db = _b.db;
             return __awaiter(this, void 0, void 0, function () {
                 var user, languagesArray, languages, interestsArray, interests, imagesArray, images, i, idStr, chatsList, chats;
+                var _c;
                 var _this = this;
-                return __generator(this, function (_c) {
-                    switch (_c.label) {
+                return __generator(this, function (_d) {
+                    switch (_d.label) {
                         case 0: return [4 /*yield*/, db.User.findOne({ where: { email: input.email, password: input.password } })
                             //convert dob from birthdate to age in years
                         ];
                         case 1:
-                            user = _c.sent();
+                            user = _d.sent();
                             //convert dob from birthdate to age in years
                             user.dataValues.dob = calculateAgeFromBirthdate(user.dataValues.dob);
                             return [4 /*yield*/, db.User.findOne({
@@ -57,7 +58,7 @@ module.exports = {
                                     include: db.Language
                                 })];
                         case 2:
-                            languagesArray = _c.sent();
+                            languagesArray = _d.sent();
                             languages = [];
                             languagesArray.languages.forEach(function (language) {
                                 languages.push({
@@ -70,7 +71,7 @@ module.exports = {
                                     include: db.Interests
                                 })];
                         case 3:
-                            interestsArray = _c.sent();
+                            interestsArray = _d.sent();
                             interests = [];
                             interestsArray.interests.forEach(function (interest) {
                                 interests.push({
@@ -83,7 +84,7 @@ module.exports = {
                                     include: db.UserAlbum
                                 })];
                         case 4:
-                            imagesArray = _c.sent();
+                            imagesArray = _d.sent();
                             images = [];
                             for (i = 0; i < imagesArray.dataValues.userAlbums.length; i++) {
                                 images.push({
@@ -92,14 +93,19 @@ module.exports = {
                                 });
                             }
                             idStr = user.dataValues.id.toString();
-                            return [4 /*yield*/, db.Chats.findAll({ where: { user1Id: idStr } })];
+                            return [4 /*yield*/, db.Chats.findAll({ where: (_c = {}, _c[Op.or] = [{ user1Id: idStr }, { userId: idStr }], _c) })];
                         case 5:
-                            chatsList = _c.sent();
+                            chatsList = _d.sent();
                             chats = [];
                             chatsList.forEach(function (chat) { return __awaiter(_this, void 0, void 0, function () {
-                                var friend;
+                                var id, friend;
                                 return __generator(this, function (_a) {
-                                    friend = db.User.findOne({ where: { id: chat.dataValues.userId } });
+                                    id = chat.dataValues.userId.toString();
+                                    if (user.dataValues.id.toString() === chat.dataValues.userId.toString())
+                                        id = chat.dataValues.user1Id;
+                                    console.log(chat.dataValues.userId.toString(), 'userid');
+                                    friend = db.User.findOne({ where: { id: id } });
+                                    // .then((result) => console.log(result))
                                     chats.push({
                                         id: chat.dataValues.id,
                                         userId: chat.dataValues.userId,
@@ -279,6 +285,45 @@ module.exports = {
                         case 1:
                             messages = _c.sent();
                             return [2 /*return*/, messages];
+                    }
+                });
+            });
+        },
+        reviews: function (_, _a, _b) {
+            var input = _a.input;
+            var db = _b.db;
+            return __awaiter(this, void 0, void 0, function () {
+                var reviews, returnedReviews, i, author;
+                return __generator(this, function (_c) {
+                    switch (_c.label) {
+                        case 0: return [4 /*yield*/, db.Reviews.findAll({ where: { userId: input.userId } })
+                            // get the info of the users who left the review
+                        ];
+                        case 1:
+                            reviews = _c.sent();
+                            returnedReviews = [];
+                            i = 0;
+                            _c.label = 2;
+                        case 2:
+                            if (!(i < reviews.length)) return [3 /*break*/, 5];
+                            return [4 /*yield*/, db.User.findOne({ where: { id: reviews[i].dataValues.authorId } })];
+                        case 3:
+                            author = _c.sent();
+                            returnedReviews.push({
+                                id: reviews[i].dataValues.id,
+                                rating: reviews[i].dataValues.rating,
+                                content: reviews[i].dataValues.content,
+                                profile: {
+                                    id: author.dataValues.id,
+                                    firstName: author.dataValues.firstName,
+                                    profileImg: author.dataValues.profileImg
+                                }
+                            });
+                            _c.label = 4;
+                        case 4:
+                            i++;
+                            return [3 /*break*/, 2];
+                        case 5: return [2 /*return*/, returnedReviews];
                     }
                 });
             });
@@ -510,6 +555,38 @@ module.exports = {
                             _d.sent();
                             _d.label = 5;
                         case 5: return [2 /*return*/];
+                    }
+                });
+            });
+        },
+        reviews: function (_, _a, _b) {
+            var input = _a.input;
+            var db = _b.db;
+            return __awaiter(this, void 0, void 0, function () {
+                var review, author;
+                return __generator(this, function (_c) {
+                    switch (_c.label) {
+                        case 0: return [4 /*yield*/, db.Reviews.create({
+                                userId: input.userId,
+                                authorId: input.authorId,
+                                rating: input.rating,
+                                content: input.content
+                            })];
+                        case 1:
+                            review = _c.sent();
+                            return [4 /*yield*/, db.User.findOne({ where: { id: input.authorId } })];
+                        case 2:
+                            author = _c.sent();
+                            return [2 /*return*/, {
+                                    id: review.dataValues.id,
+                                    rating: review.dataValues.rating,
+                                    content: review.dataValues.content,
+                                    profile: {
+                                        id: author.dataValues.id,
+                                        firstName: author.dataValues.firstName,
+                                        profileImg: author.dataValues.profileImg
+                                    }
+                                }];
                     }
                 });
             });
