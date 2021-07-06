@@ -11,7 +11,9 @@ const server = new ApolloServer({
   resolvers,
   context() {
     return { db }
-  }
+  },
+  introspection: true,
+  playground: true
 })
 
 sequelize.sync().then(() => {
