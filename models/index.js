@@ -7,17 +7,7 @@ var _e = require('./experiences'), ExperiencesFactory = _e.ExperiencesFactory, E
 var _f = require('./interests'), InterestsFactory = _f.InterestsFactory, InterestsStatic = _f.InterestsStatic;
 var _g = require('./user-album'), UserAlbumFactory = _g.UserAlbumFactory, UserAlbumStatic = _g.UserAlbumStatic;
 var _h = require('./messages'), MessagesFactory = _h.MessagesFactory, MessagesStatic = _h.MessagesStatic;
-// type DB = {
-//   sequelize: typeof Sequelize;
-//   User: typeof UserStatic;
-//   Language: typeof LanguageStatic;
-//   Favorites: typeof FavoritesStatic;
-//   Experiences: typeof ExperiencesStatic;
-//   Interests: typeof InterestsStatic;
-//   UserAlbum: typeof UserAlbumStatic;
-//   Messages: typeof MessagesStatic;
-// }
-var sequelize = new Sequelize((process.env.DB_NAME = "bogo"), (process.env.DB_USER = "postgres"), (process.env.DB_PASSWORD = "postgres"), {
+var sequelize = new Sequelize((process.env.DB_NAME), (process.env.DB_USER), (process.env.DB_PASSWORD), {
     port: Number(process.env.DB_PORT) || 5432,
     host: process.env.DB_HOST || "localhost",
     dialect: "postgres",

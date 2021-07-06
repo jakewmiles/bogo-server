@@ -34,13 +34,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var Op = require("sequelize").Op;
 module.exports = {
     Query: {
         user: function (_, _a, _b) {
             var input = _a.input;
             var db = _b.db;
             return __awaiter(this, void 0, void 0, function () {
-                var user, languagesArray, languages, interestsArray, interests, favoritesInfoFromDb, favorites;
+                var user, languagesArray, languages, interestsArray, interests, imagesArray, images, i, idStr, chatsList, chats;
+                var _this = this;
                 return __generator(this, function (_c) {
                     switch (_c.label) {
                         case 0: return [4 /*yield*/, db.User.findOne({ where: { email: input.email, password: input.password } })
@@ -76,20 +78,41 @@ module.exports = {
                                     name: interest.dataValues.name
                                 });
                             });
-                            return [4 /*yield*/, db.Favorites.findAll({ where: { user1Id: "51" } })];
+                            return [4 /*yield*/, db.User.findOne({
+                                    where: { email: user.dataValues.email },
+                                    include: db.UserAlbum
+                                })];
                         case 4:
-                            favoritesInfoFromDb = _c.sent();
-                            favorites = [];
-                            favoritesInfoFromDb.forEach(function (favorite) {
-                                favorites.push({
-                                    id: favorite.dataValues.id,
-                                    userId: favorite.dataValues.userId,
-                                    user1Id: favorite.dataValues.user1Id
+                            imagesArray = _c.sent();
+                            images = [];
+                            for (i = 0; i < imagesArray.dataValues.userAlbums.length; i++) {
+                                images.push({
+                                    photoId: imagesArray.dataValues.userAlbums[i].dataValues.id,
+                                    imageUrl: imagesArray.dataValues.userAlbums[i].dataValues.imageURL
                                 });
-                            });
+                            }
+                            idStr = user.dataValues.id.toString();
+                            return [4 /*yield*/, db.Chats.findAll({ where: { user1Id: idStr } })];
+                        case 5:
+                            chatsList = _c.sent();
+                            chats = [];
+                            chatsList.forEach(function (chat) { return __awaiter(_this, void 0, void 0, function () {
+                                var friend;
+                                return __generator(this, function (_a) {
+                                    friend = db.User.findOne({ where: { id: chat.dataValues.userId } });
+                                    chats.push({
+                                        id: chat.dataValues.id,
+                                        userId: chat.dataValues.userId,
+                                        user1Id: chat.dataValues.user1Id,
+                                        profile: friend
+                                    });
+                                    return [2 /*return*/];
+                                });
+                            }); });
                             user.dataValues.languages = languages;
                             user.dataValues.interests = interests;
-                            user.dataValues.favorites = favorites;
+                            user.dataValues.chats = chats;
+                            user.dataValues.userAlbum = images;
                             return [2 /*return*/, user.dataValues];
                     }
                 });
@@ -98,11 +121,94 @@ module.exports = {
         users: function (_, _a, _b) {
             var input = _a.input;
             var db = _b.db;
-            var users = db.User.findAll();
-            //{ where: { location: input.location, interest: input.interest}}
-            return users;
-            // users = get users array from db using location and interests in input
-            // return users;
+            return __awaiter(this, void 0, void 0, function () {
+                var users, returnedUsers, _loop_1, i;
+                return __generator(this, function (_c) {
+                    switch (_c.label) {
+                        case 0: return [4 /*yield*/, db.User.findAll({ where: { city: input.city } })];
+                        case 1:
+                            users = _c.sent();
+                            returnedUsers = [];
+                            _loop_1 = function (i) {
+                                var favorite, languagesArray, languages, interestsArray, interests, imagesArray, images, i_1;
+                                var _d;
+                                return __generator(this, function (_e) {
+                                    switch (_e.label) {
+                                        case 0:
+                                            users[i].dataValues.dob = calculateAgeFromBirthdate(users[i].dataValues.dob);
+                                            return [4 /*yield*/, db.Favorites.findOne({
+                                                    where: (_d = {}, _d[Op.and] = [{ userId: users[i].dataValues.id }, { activeUserId: input.activeUserId }], _d)
+                                                })];
+                                        case 1:
+                                            favorite = _e.sent();
+                                            if (favorite) {
+                                                users[i].dataValues.isFavorited = true;
+                                            }
+                                            else {
+                                                users[i].dataValues.isFavorited = false;
+                                            }
+                                            return [4 /*yield*/, db.User.findOne({
+                                                    where: { email: users[i].dataValues.email },
+                                                    include: db.Language
+                                                })];
+                                        case 2:
+                                            languagesArray = _e.sent();
+                                            languages = [];
+                                            languagesArray.languages.forEach(function (language) {
+                                                languages.push({
+                                                    id: language.dataValues.id,
+                                                    name: language.dataValues.name
+                                                });
+                                            });
+                                            return [4 /*yield*/, db.User.findOne({
+                                                    where: { email: users[i].dataValues.email },
+                                                    include: db.Interests
+                                                })];
+                                        case 3:
+                                            interestsArray = _e.sent();
+                                            interests = [];
+                                            interestsArray.interests.forEach(function (interest) {
+                                                interests.push({
+                                                    id: interest.dataValues.id,
+                                                    name: interest.dataValues.name
+                                                });
+                                            });
+                                            return [4 /*yield*/, db.User.findOne({
+                                                    where: { email: users[i].dataValues.email },
+                                                    include: db.UserAlbum
+                                                })];
+                                        case 4:
+                                            imagesArray = _e.sent();
+                                            images = [];
+                                            for (i_1 = 0; i_1 < imagesArray.dataValues.userAlbums.length; i_1++) {
+                                                images.push({
+                                                    photoId: imagesArray.dataValues.userAlbums[i_1].dataValues.id,
+                                                    imageUrl: imagesArray.dataValues.userAlbums[i_1].dataValues.imageURL
+                                                });
+                                            }
+                                            users[i].dataValues.languages = languages;
+                                            users[i].dataValues.interests = interests;
+                                            users[i].dataValues.userAlbum = images;
+                                            returnedUsers.push(users[i].dataValues);
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            };
+                            i = 0;
+                            _c.label = 2;
+                        case 2:
+                            if (!(i < users.length)) return [3 /*break*/, 5];
+                            return [5 /*yield**/, _loop_1(i)];
+                        case 3:
+                            _c.sent();
+                            _c.label = 4;
+                        case 4:
+                            i++;
+                            return [3 /*break*/, 2];
+                        case 5: return [2 /*return*/, returnedUsers];
+                    }
+                });
+            });
         },
         languages: function (_, __, _a) {
             var db = _a.db;
@@ -113,10 +219,7 @@ module.exports = {
                         case 0: return [4 /*yield*/, db.Language.findAll()];
                         case 1:
                             langauges = _b.sent();
-                            return [2 /*return*/, langauges
-                                // get array of languages from db
-                                // return languages;
-                            ];
+                            return [2 /*return*/, langauges];
                     }
                 });
             });
@@ -130,45 +233,22 @@ module.exports = {
                         case 0: return [4 /*yield*/, db.Interests.findAll()];
                         case 1:
                             interests = _b.sent();
-                            return [2 /*return*/, interests
-                                // get array of interests from db
-                                // return interests;
-                            ];
+                            return [2 /*return*/, interests];
                     }
                 });
             });
         },
-        favorites: function (_, _a, _b) {
+        chats: function (_, _a, _b) {
             var input = _a.input;
             var db = _b.db;
             return __awaiter(this, void 0, void 0, function () {
-                var favorites;
+                var chats;
                 return __generator(this, function (_c) {
                     switch (_c.label) {
-                        case 0: return [4 /*yield*/, db.Favorites.findAll({ where: { user1Id: input.id } })];
+                        case 0: return [4 /*yield*/, db.Chats.findAll({ where: { user1Id: input.id } })];
                         case 1:
-                            favorites = _c.sent();
-                            return [2 /*return*/, favorites
-                                // get list of favourites based on user id from input
-                                // return favorites;
-                            ];
-                    }
-                });
-            });
-        },
-        experiences: function (_, _a, _b) {
-            var input = _a.input;
-            var db = _b.db;
-            return __awaiter(this, void 0, void 0, function () {
-                var experience;
-                return __generator(this, function (_c) {
-                    switch (_c.label) {
-                        case 0: return [4 /*yield*/, db.user_experiences.findAll({ where: { userId: input.id } })];
-                        case 1:
-                            experience = _c.sent();
-                            return [2 /*return*/, experience
-                                // return experiences;
-                            ];
+                            chats = _c.sent();
+                            return [2 /*return*/, chats];
                     }
                 });
             });
@@ -183,10 +263,7 @@ module.exports = {
                         case 0: return [4 /*yield*/, db.UserAlbum.findAll({ where: { userId: input.id } })];
                         case 1:
                             photos = _c.sent();
-                            return [2 /*return*/, photos
-                                // get list of photos based on user id from input
-                                // return photos;
-                            ];
+                            return [2 /*return*/, photos];
                     }
                 });
             });
@@ -198,13 +275,10 @@ module.exports = {
                 var messages;
                 return __generator(this, function (_c) {
                     switch (_c.label) {
-                        case 0: return [4 /*yield*/, db.Messages.findAll({ where: { favoriteId: input.id } })];
+                        case 0: return [4 /*yield*/, db.Messages.findAll({ where: { chatId: input.chatId } })];
                         case 1:
                             messages = _c.sent();
-                            return [2 /*return*/, messages
-                                // get list of photos based on favourite id from input
-                                // return messages;
-                            ];
+                            return [2 /*return*/, messages];
                     }
                 });
             });
@@ -215,23 +289,11 @@ module.exports = {
             var input = _a.input;
             var db = _b.db;
             return __awaiter(this, void 0, void 0, function () {
-                var user, i, i, languagesArray, languages_1, interestsArray, interests_1, user, user;
+                var user, i, i, i, image, imagesArray, images_1, languagesArray, languages_1, interestsArray, interests_1, user;
                 return __generator(this, function (_c) {
                     switch (_c.label) {
                         case 0:
-                            //convert int from client into gender enum
-                            switch (input.gender) {
-                                case 0:
-                                    input.gender = 'MALE';
-                                    break;
-                                case 1:
-                                    input.gender = 'FEMALE';
-                                    break;
-                                case 2:
-                                    input.gender = 'OTHER';
-                                    break;
-                            }
-                            if (!!input.id) return [3 /*break*/, 12];
+                            if (!!input.id) return [3 /*break*/, 17];
                             return [4 /*yield*/, db.User.create({
                                     firstName: input.firstName,
                                     lastName: input.lastName,
@@ -275,11 +337,39 @@ module.exports = {
                         case 8:
                             i++;
                             return [3 /*break*/, 6];
-                        case 9: return [4 /*yield*/, db.User.findOne({
-                                where: { email: user.dataValues.email },
-                                include: db.Language
-                            })];
+                        case 9:
+                            i = 0;
+                            _c.label = 10;
                         case 10:
+                            if (!(i < input.userAlbum.length)) return [3 /*break*/, 13];
+                            image = input.userAlbum[i];
+                            return [4 /*yield*/, db.UserAlbum.create({
+                                    userId: user.dataValues.id,
+                                    imageURL: image
+                                })];
+                        case 11:
+                            _c.sent();
+                            _c.label = 12;
+                        case 12:
+                            i++;
+                            return [3 /*break*/, 10];
+                        case 13: return [4 /*yield*/, db.UserAlbum.findAll({
+                                where: { userId: user.dataValues.id }
+                            })];
+                        case 14:
+                            imagesArray = _c.sent();
+                            images_1 = [];
+                            imagesArray.forEach(function (image) {
+                                images_1.push({
+                                    photoId: image.dataValues.id,
+                                    imageUrl: image.dataValues.imageURL
+                                });
+                            });
+                            return [4 /*yield*/, db.User.findOne({
+                                    where: { email: user.dataValues.email },
+                                    include: db.Language
+                                })];
+                        case 15:
                             languagesArray = _c.sent();
                             languages_1 = [];
                             languagesArray.languages.forEach(function (language) {
@@ -292,7 +382,7 @@ module.exports = {
                                     where: { email: user.dataValues.email },
                                     include: db.Interests
                                 })];
-                        case 11:
+                        case 16:
                             interestsArray = _c.sent();
                             interests_1 = [];
                             interestsArray.interests.forEach(function (interest) {
@@ -303,18 +393,10 @@ module.exports = {
                             });
                             user.dataValues.languages = languages_1;
                             user.dataValues.interests = interests_1;
-                            user.dataValues.favorites = [];
+                            user.dataValues.userAlbum = images_1;
+                            user.dataValues.chats = [];
                             return [2 /*return*/, user.dataValues];
-                        case 12:
-                            if (!!input.email) return [3 /*break*/, 14];
-                            return [4 /*yield*/, db.User.destroy({ where: { id: input.id } })];
-                        case 13:
-                            user = _c.sent();
-                            user.removeLanguage();
-                            user.removeInterests();
-                            user.dataValues.dob = calculateAgeFromBirthdate(user.dataValues.dob);
-                            return [2 /*return*/, user];
-                        case 14: return [4 /*yield*/, db.User.update({
+                        case 17: return [4 /*yield*/, db.User.update({
                                 firstName: input.firstName,
                                 lastName: input.lastName,
                                 email: input.email,
@@ -328,51 +410,12 @@ module.exports = {
                                 profileImg: input.profileImg,
                                 filterCity: input.filterCity
                             }, { where: { id: input.id } })];
-                        case 15:
+                        case 18:
                             user = _c.sent();
-                            user.dataValues.dob = calculateAgeFromBirthdate(user.dataValues.dob);
-                            return [2 /*return*/, user];
-                    }
-                });
-            });
-        },
-        experiences: function (_, _a, _b) {
-            var input = _a.input;
-            var db = _b.db;
-            return __awaiter(this, void 0, void 0, function () {
-                var experience, experience, experience;
-                return __generator(this, function (_c) {
-                    switch (_c.label) {
-                        case 0:
-                            if (!!input.id) return [3 /*break*/, 2];
-                            return [4 /*yield*/, db.Experiences.create({
-                                    userId: input.userId,
-                                    title: input.title,
-                                    description: input.description
-                                })];
-                        case 1:
-                            experience = _c.sent();
-                            return [2 /*return*/, experience
-                                //add experience to experiences table
-                            ];
-                        case 2:
-                            if (!!input.title) return [3 /*break*/, 4];
-                            return [4 /*yield*/, db.Experiences.destroy({ id: input.id })];
-                        case 3:
-                            experience = _c.sent();
-                            return [2 /*return*/, []
-                                //delete experience from experiences table
-                            ];
-                        case 4: return [4 /*yield*/, db.Experiences.update({
-                                userId: input.userId,
-                                title: input.title,
-                                description: input.description
-                            }, { where: { id: input.id } })];
-                        case 5:
-                            experience = _c.sent();
-                            return [2 /*return*/, experience
-                                //edit experience in experiences tables
-                            ];
+                            if (input.dob) {
+                                user.dataValues.dob = calculateAgeFromBirthdate(user.dataValues.dob);
+                            }
+                            return [2 /*return*/, { id: input.id }];
                     }
                 });
             });
@@ -398,22 +441,39 @@ module.exports = {
                 });
             });
         },
-        // return photo;
         messages: function (_, _a, _b) {
             var input = _a.input;
             var db = _b.db;
             return __awaiter(this, void 0, void 0, function () {
-                var message;
+                var message, chat, chatID;
                 return __generator(this, function (_c) {
                     switch (_c.label) {
-                        case 0: return [4 /*yield*/, db.Messages.create({
-                                favoriteid: input.favoriteid,
-                                userid: input.userid,
-                                content: input.content
-                            })];
+                        case 0:
+                            if (!input.chatId) return [3 /*break*/, 2];
+                            return [4 /*yield*/, db.Messages.create({
+                                    chatId: input.chatId,
+                                    authorId: input.senderId,
+                                    content: input.content
+                                })];
                         case 1:
                             message = _c.sent();
-                            return [2 /*return*/, message];
+                            return [3 /*break*/, 5];
+                        case 2: return [4 /*yield*/, db.Chats.create({
+                                userId: input.recieverId,
+                                user1Id: input.senderId
+                            })];
+                        case 3:
+                            chat = _c.sent();
+                            chatID = chat.dataValues.id.toString();
+                            return [4 /*yield*/, db.Messages.create({
+                                    chatId: chatID,
+                                    authorId: input.senderId,
+                                    content: input.content
+                                })];
+                        case 4:
+                            message = _c.sent();
+                            _c.label = 5;
+                        case 5: return [2 /*return*/, message];
                     }
                 });
             });
@@ -422,45 +482,34 @@ module.exports = {
             var input = _a.input;
             var db = _b.db;
             return __awaiter(this, void 0, void 0, function () {
-                var favorites, favorite;
-                return __generator(this, function (_c) {
-                    switch (_c.label) {
-                        case 0:
-                            if (!input.id) return [3 /*break*/, 2];
-                            return [4 /*yield*/, db.Favorites.destroy({ where: { id: input.id } })];
+                var favorite;
+                var _c;
+                return __generator(this, function (_d) {
+                    switch (_d.label) {
+                        case 0: return [4 /*yield*/, db.Favorites.findOne({
+                                where: (_c = {}, _c[Op.and] = [{ userId: input.targetUserId }, { activeUserId: input.userId }], _c)
+                            })
+                            //toggle favorites on or off - delete if it is found or create
+                        ];
                         case 1:
-                            favorites = _c.sent();
-                            return [2 /*return*/, favorites
-                                // remove from favorite
-                            ];
-                        case 2: return [4 /*yield*/, db.Favorites.create({ userId: input.favoriteId, user1Id: input.user1Id })];
-                        case 3:
-                            favorite = _c.sent();
-                            return [2 /*return*/, favorite];
-                    }
-                });
-            });
-        },
-        languages: function (_, _a, _b) {
-            var input = _a.input;
-            var db = _b.db;
-            return __awaiter(this, void 0, void 0, function () {
-                var languages, language;
-                return __generator(this, function (_c) {
-                    switch (_c.label) {
-                        case 0:
-                            if (!input.id) return [3 /*break*/, 2];
-                            return [4 /*yield*/, db.users_languages.destroy({ where: { id: input.id } })
-                                // remove from favorite
-                            ];
-                        case 1:
-                            languages = _c.sent();
-                            // remove from favorite
-                            return [2 /*return*/, languages];
-                        case 2: return [4 /*yield*/, db.users_langauges.create({ userId: input.UserId, name: input.name })];
-                        case 3:
-                            language = _c.sent();
-                            return [2 /*return*/, language];
+                            favorite = _d.sent();
+                            if (!favorite) return [3 /*break*/, 3];
+                            return [4 /*yield*/, db.Favorites.destroy({
+                                    where: {
+                                        id: favorite.dataValues.id
+                                    }
+                                })];
+                        case 2:
+                            _d.sent();
+                            return [3 /*break*/, 5];
+                        case 3: return [4 /*yield*/, db.Favorites.create({
+                                activeUserId: input.userId,
+                                userId: input.targetUserId
+                            })];
+                        case 4:
+                            _d.sent();
+                            _d.label = 5;
+                        case 5: return [2 /*return*/];
                     }
                 });
             });
@@ -468,12 +517,11 @@ module.exports = {
         bulkCreateInterests: function (_, __, _a) {
             var db = _a.db;
             return __awaiter(this, void 0, void 0, function () {
-                var bulkInterests;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
-                        case 0: return [4 /*yield*/, db.Interests.bulkCreate([{ name: "rock-climbing" }, { name: "skiing" }, { name: "singing" }, { name: "cooking" }])];
+                        case 0: return [4 /*yield*/, db.Interests.bulkCreate([{ name: "Rock-climbing" }, { name: "Skiing" }, { name: "Singing" }, { name: "Cooking" }])];
                         case 1:
-                            bulkInterests = _b.sent();
+                            _b.sent();
                             return [2 /*return*/];
                     }
                 });
@@ -481,7 +529,7 @@ module.exports = {
         },
         bulkCreateLanguages: function (_, __, _a) {
             var db = _a.db;
-            var bulkLanguages = db.Language.bulkCreate([{ name: "English" }, { name: "Japanese" }, { name: "Russian" }, { name: "Urdu" }]);
+            db.Language.bulkCreate([{ name: "English" }, { name: "Japanese" }, { name: "Russian" }, { name: "Urdu" }]);
             return;
         }
     }
