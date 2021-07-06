@@ -42,6 +42,7 @@ const typedefs = gql`
     chatId: Int!
     authorId: Int!
     content: String
+    createdAt: String
   }
 
   type Experience {
@@ -142,6 +143,10 @@ const typedefs = gql`
     bulkCreateFavorites: User
     languages:[Language]!
   }
+
+  # type Subscription {
+  #   messageFeed:Message
+  # }
 
 `;
 
