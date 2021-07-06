@@ -8,20 +8,6 @@ const { InterestsFactory, InterestsStatic } = require('./interests')
 const { UserAlbumFactory, UserAlbumStatic } = require('./user-album')
 const { MessagesFactory, MessagesStatic } = require('./messages')
 
-
-
-// type DB = {
-//   sequelize: typeof Sequelize;
-//   User: typeof UserStatic;
-//   Language: typeof LanguageStatic;
-//   Favorites: typeof FavoritesStatic;
-//   Experiences: typeof ExperiencesStatic;
-//   Interests: typeof InterestsStatic;
-//   UserAlbum: typeof UserAlbumStatic;
-//   Messages: typeof MessagesStatic;
-
-// }
-
 const sequelize = new Sequelize(
   (process.env.DB_NAME = "bogo"),
   (process.env.DB_USER = "postgres"),

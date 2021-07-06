@@ -1,1 +1,7 @@
-PORT= server port
+PORT=number
+
+//database infomation
+DB_NAME=string
+DB_USER=string
+DB_PASSWORD=string
+DB_PORT=number
