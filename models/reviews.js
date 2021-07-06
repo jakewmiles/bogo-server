@@ -15,7 +15,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-exports.UserFactory = exports.Review = void 0;
+exports.ReviewFactory = exports.Review = void 0;
 var sequelize_1 = require("sequelize");
 var Review = /** @class */ (function (_super) {
     __extends(Review, _super);
@@ -25,12 +25,8 @@ var Review = /** @class */ (function (_super) {
     return Review;
 }(sequelize_1.Model));
 exports.Review = Review;
-function UserFactory(sequelize) {
+function ReviewFactory(sequelize) {
     return sequelize.define("reviews", {
-        userId: {
-            type: sequelize_1.DataTypes.STRING(50),
-            allowNull: false
-        },
         authorId: {
             type: sequelize_1.DataTypes.STRING(50)
         },
@@ -42,4 +38,4 @@ function UserFactory(sequelize) {
         }
     });
 }
-exports.UserFactory = UserFactory;
+exports.ReviewFactory = ReviewFactory;

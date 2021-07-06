@@ -6,12 +6,12 @@ const { FavoritesFactory, FavoritesStatic } = require('./favorites')
 const { InterestsFactory, InterestsStatic } = require('./interests')
 const { UserAlbumFactory, UserAlbumStatic } = require('./user-album')
 const { MessagesFactory, MessagesStatic } = require('./messages')
-const { ReviewsFactory, ReviewsStatic } = require('./reviews')
+const { ReviewFactory, ReviewStatic } = require('./reviews')
 
 const sequelize = new Sequelize(
-  (process.env.DB_NAME),
-  (process.env.DB_USER),
-  (process.env.DB_PASSWORD),
+  (process.env.DB_NAME = 'bogo'),
+  (process.env.DB_USER = 'postgres'),
+  (process.env.DB_PASSWORD = 'postgres'),
   {
     port: Number(process.env.DB_PORT) || 5432,
     host: process.env.DB_HOST || "localhost",
@@ -32,7 +32,7 @@ const Favorites = FavoritesFactory(sequelize)
 const Interests = InterestsFactory(sequelize)
 const UserAlbum = UserAlbumFactory(sequelize)
 const Messages = MessagesFactory(sequelize)
-const Reviews = ReviewsFactory(sequelize)
+const Reviews = ReviewFactory(sequelize)
 
 User.hasMany(UserAlbum)
 User.hasMany(Chats)

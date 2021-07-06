@@ -155,7 +155,7 @@ module.exports = {
       return messages
     },
     async reviews(_, { input }, { db }) {
-      const reviews = await db.Reviews.findAll({ where: { userId: input.userId } })
+      const reviews = await db.Reviews.findAll({ where: { id: input.id } })
 
       // get the info of the users who left the review
 

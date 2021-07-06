@@ -1,7 +1,6 @@
 import { BuildOptions, DataTypes, Model, Sequelize } from 'sequelize';
 
 export interface ReviewAttributes {
-  userId: string;
   authorId: string;
   rating: number;
   content: string;
@@ -13,12 +12,8 @@ export type ReviewStatic = typeof Model & {
   new(values?: object, options?: BuildOptions): ReviewModel;
 };
 
-export function UserFactory(sequelize: Sequelize) {
+export function ReviewFactory(sequelize: Sequelize) {
   return <ReviewStatic>sequelize.define("reviews", {
-    userId: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-    },
     authorId: {
       type: DataTypes.STRING(50),
     },
