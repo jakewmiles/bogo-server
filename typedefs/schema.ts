@@ -43,6 +43,7 @@ const typedefs = gql`
     chatId: Int!
     authorId: Int!
     content: String
+    createdAt: String
   }
 
   type Photo {
@@ -127,6 +128,7 @@ const typedefs = gql`
     bulkCreateLanguages: User
     bulkCreateFavorites: User
   }
+
 `;
 
 module.exports = typedefs

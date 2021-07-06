@@ -1,4 +1,6 @@
-const { Op } = require("sequelize");
+
+const { Op } = require('sequelize')
+
 
 module.exports = {
   Query: {
@@ -45,11 +47,15 @@ module.exports = {
       }
 
       const idStr = user.dataValues.id.toString()
+      const chatsList = await db.Chats.findAll({where: { [Op.or]:[{user1Id: idStr}, {userId: idStr}] } });
 
-      const chatsList = await db.Chats.findAll({ where: { user1Id: idStr } });
       let chats = [];
       chatsList.forEach(async chat => {
-        const friend = db.User.findOne({ where: { id: chat.dataValues.userId } })
+        let id = chat.dataValues.userId.toString();
+        if (user.dataValues.id.toString() === chat.dataValues.userId.toString() ) id = chat.dataValues.user1Id        
+        console.log(chat.dataValues.userId.toString(), 'userid')
+        const friend = db.User.findOne({ where: {  id:id }})
+        // .then((result) => console.log(result))
         chats.push({
           id: chat.dataValues.id,
           userId: chat.dataValues.userId,
@@ -309,7 +315,8 @@ module.exports = {
       db.Language.bulkCreate([{ name: "English" }, { name: "Japanese" }, { name: "Russian" }, { name: "Urdu" }])
       return;
     }
-  }
+  },
+ 
 }
 
 function calculateAgeFromBirthdate(birthdate) {
