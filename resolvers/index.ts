@@ -195,7 +195,6 @@ module.exports = {
 
       return returnedReviews;
     },
-  },
   Mutation: {
     async user(_, { input }, { db }) {
       //if the user is new so yet to receive ID
