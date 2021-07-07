@@ -1,5 +1,6 @@
-
-const { Op } = require('sequelize')
+const { Op } = require("sequelize");
+const axios = require('axios');
+require('dotenv').config();
 
 
 module.exports = {
@@ -159,6 +160,15 @@ module.exports = {
     async messages(_, { input }, { db }) {
       const messages = await db.Messages.findAll({ where: { chatId: input.chatId } })
       return messages
+      // get list of photos based on favourite id from input
+      // return messages;
+    },
+    async places(_, { input }, __) {
+      const { lat, lng } = input;
+      const response = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=50000&type=tourist_attraction&key=${process.env.API_KEY}`)
+      let results = await response.data.results;
+      return results;
+    }
     },
     async reviews(_, { input }, { db }) {
       const reviews = await db.Reviews.findAll({ where: { id: input.id } })
