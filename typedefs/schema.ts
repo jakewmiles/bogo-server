@@ -9,6 +9,7 @@ const typedefs = gql`
     dob: Int
     guide: Boolean
     city: String
+    rating: Float
     country: String
     gender: Gender
     summary: String
@@ -56,6 +57,7 @@ const typedefs = gql`
     rating: Int!
     content: String!
     profile: User!
+    createdAt: String!
   }
 
   input LoginInput {
