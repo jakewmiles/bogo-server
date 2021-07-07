@@ -64,10 +64,13 @@ module.exports = {
         });
       })
 
+      const rating = calcRating(user.dataValues.id, db);
+
       user.dataValues.languages = languages;
       user.dataValues.interests = interests;
       user.dataValues.chats = chats;
       user.dataValues.userAlbum = images;
+      user.dataValues.rating = rating;
 
       return user.dataValues;
     },
@@ -126,9 +129,12 @@ module.exports = {
           })
         }
 
+        const rating = calcRating(users[i].dataValues.id, db);
+
         users[i].dataValues.languages = languages;
         users[i].dataValues.interests = interests;
         users[i].dataValues.userAlbum = images;
+        users[i].dataValues.rating = rating;
         returnedUsers.push(users[i].dataValues);
       }
       return returnedUsers
@@ -168,6 +174,7 @@ module.exports = {
           id: reviews[i].dataValues.id,
           rating: reviews[i].dataValues.rating,
           content: reviews[i].dataValues.content,
+          createdAt: reviews[i].dataValues.createdAt,
           profile: {
             id: author.dataValues.id,
             firstName: author.dataValues.firstName,
@@ -379,3 +386,26 @@ function calculateAgeFromBirthdate(birthdate) {
 
   return currentYear - birthYear + postBirthdayInCurrentYear - 1;
 };
+
+async function calcRating(userId, db) {
+  const reviews = await db.Reviews.findAll({ where: { userId: userId } })
+
+  //if a user has no review the default rating is 4
+  if (reviews.length === 0) {
+    return 4;
+  }
+
+  let ratingSum = 0;
+  let ratingCount = 0;
+
+  reviews.forEach(review => {
+    ratingSum += review.dataValues.rating;
+    ratingCount++;
+  })
+
+  const ratingTimes10 = (ratingSum / ratingCount) * 10;
+
+  const ratingToNearest5 = Math.round(ratingTimes10 / 5) * 5;
+
+  return ratingToNearest5 / 10;
+}
