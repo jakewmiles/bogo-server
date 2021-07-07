@@ -15,32 +15,27 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-exports.ExperiencesFactory = exports.Experiences = void 0;
+exports.ReviewFactory = exports.Review = void 0;
 var sequelize_1 = require("sequelize");
-var Experiences = /** @class */ (function (_super) {
-    __extends(Experiences, _super);
-    function Experiences() {
+var Review = /** @class */ (function (_super) {
+    __extends(Review, _super);
+    function Review() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    return Experiences;
+    return Review;
 }(sequelize_1.Model));
-exports.Experiences = Experiences;
-;
-function ExperiencesFactory(sequelize) {
-    return sequelize.define('experiences', {
-        id: {
-            type: sequelize_1.DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
+exports.Review = Review;
+function ReviewFactory(sequelize) {
+    return sequelize.define("reviews", {
+        authorId: {
+            type: sequelize_1.DataTypes.STRING(50)
         },
-        name: {
-            type: sequelize_1.DataTypes.STRING(50),
-            allowNull: false
+        rating: {
+            type: sequelize_1.DataTypes.INTEGER
         },
-        description: {
-            type: sequelize_1.DataTypes.STRING(2000),
-            allowNull: false
+        content: {
+            type: sequelize_1.DataTypes.STRING(3000)
         }
     });
 }
-exports.ExperiencesFactory = ExperiencesFactory;
+exports.ReviewFactory = ReviewFactory;
