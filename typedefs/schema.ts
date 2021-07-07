@@ -57,6 +57,15 @@ const typedefs = gql`
     imageUrl: String!
   }
 
+  type Place {
+    name: String!
+    rating: Float!
+    user_ratings_total: Int!
+    types: [String]!
+    icon: String!
+
+  }
+
   input LoginInput {
     email: String!
     password: String!
@@ -116,6 +125,11 @@ const typedefs = gql`
     targetUserId: String
   }
 
+  input CoordsInput {
+    lat: String!
+    lng: String!
+  }
+
   enum Gender {
     MALE
     FEMALE
@@ -131,6 +145,7 @@ const typedefs = gql`
     experiences(input: UserInput!): [Experience]! #get list of experiences when looking at a user profile
     userAlbums(input: UserInput!): [Photo]! #get photos when looking at a user profile
     messages(input: MessageInput!): [Message]! #get messages when opening a chat
+    places(input: CoordsInput!): [Place]!
   }
 
   type Mutation {

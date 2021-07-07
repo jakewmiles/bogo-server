@@ -1,4 +1,7 @@
 const { Op } = require("sequelize");
+const axios = require('axios');
+require('dotenv').config();
+
 
 module.exports = {
   Query: {
@@ -178,6 +181,12 @@ module.exports = {
       return messages
       // get list of photos based on favourite id from input
       // return messages;
+    },
+    async places(_, { input }, __) {
+      const { lat, lng } = input;
+      const response = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=50000&type=tourist_attraction&key=${process.env.API_KEY}`)
+      let results = await response.data.results;
+      return results;
     }
   },
   Mutation: {
