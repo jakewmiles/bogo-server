@@ -168,7 +168,6 @@ module.exports = {
       const response = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=50000&type=tourist_attraction&key=${process.env.API_KEY}`)
       let results = await response.data.results;
       return results;
-    }
     },
     async reviews(_, { input }, { db }) {
       const reviews = await db.Reviews.findAll({ where: { id: input.id } })
@@ -194,7 +193,8 @@ module.exports = {
       }
 
       return returnedReviews;
-    },
+    }
+  },
   Mutation: {
     async user(_, { input }, { db }) {
       //if the user is new so yet to receive ID

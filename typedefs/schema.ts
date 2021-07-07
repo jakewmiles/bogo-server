@@ -58,6 +58,7 @@ const typedefs = gql`
     user_ratings_total: Int!
     types: [String]!
     icon: String!
+  }
 
   type Review {
     id: ID!
@@ -122,6 +123,7 @@ const typedefs = gql`
   input CoordsInput {
     lat: String!
     lng: String!
+  }
 
   input ReviewInput {
     userId: String!
