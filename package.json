@@ -18,7 +18,9 @@
   "homepage": "https://github.com/jakewmiles/bogo-server#readme",
   "dependencies": {
     "apollo-server": "^2.25.2",
+    "axios": "^0.21.1",
     "dotenv": "^10.0.0",
+    "g-i-s": "^2.1.6",
     "graphql": "^15.5.1",
     "node-ts": "^5.1.1",
     "pg": "^8.6.0",

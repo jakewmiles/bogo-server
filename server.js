@@ -9,9 +9,7 @@ var server = new ApolloServer({
     resolvers: resolvers,
     context: function () {
         return { db: db };
-    },
-    introspection: true,
-    playground: true
+    }
 });
 sequelize.sync().then(function () {
     server.listen(process.env.PORT).then(function () {

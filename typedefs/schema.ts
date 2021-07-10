@@ -9,6 +9,7 @@ const typedefs = gql`
     dob: Int
     guide: Boolean
     city: String
+    rating: Float
     country: String
     gender: Gender
     summary: String
@@ -49,6 +50,22 @@ const typedefs = gql`
   type Photo {
     photoId: ID!
     imageUrl: String!
+  }
+
+  type Place {
+    name: String!
+    rating: Float!
+    user_ratings_total: Int!
+    types: [String]!
+    icon: String!
+  }
+
+  type Review {
+    id: ID!
+    rating: Int!
+    content: String!
+    profile: User!
+    createdAt: String!
   }
 
   input LoginInput {
@@ -103,6 +120,18 @@ const typedefs = gql`
     targetUserId: String
   }
 
+  input CoordsInput {
+    lat: String!
+    lng: String!
+  }
+
+  input ReviewInput {
+    userId: String!
+    authorId: String!
+    rating: Int!
+    content: String!
+  }
+
   enum Gender {
     MALE
     FEMALE
@@ -117,6 +146,8 @@ const typedefs = gql`
     chats(input: UserInput!): [Chat]! #get list of chats when clicking faves tab
     userAlbums(input: UserInput!): [Photo]! #get photos when looking at a user profile
     messages(input: MessageInput!): [Message]! #get messages when opening a chat
+    places(input: CoordsInput!): [Place]!
+    reviews(input: UserInput!): [Review]! #get all reviews for a user
   }
 
   type Mutation {
@@ -124,6 +155,7 @@ const typedefs = gql`
     userAlbums(input: PhotoInput!): [Photo]! #add or edit photos associated with user profile
     messages(input: MessageInput!): Message! #add or edit messages associated with a chat
     favorites(input: FavoriteInput!): User #toggle favorite
+    reviews(input: ReviewInput!): Review! #post a new review on a user
     bulkCreateInterests: [Interest]
     bulkCreateLanguages: User
     bulkCreateFavorites: User

@@ -1,5 +1,6 @@
-
-const { Op } = require('sequelize')
+const { Op } = require("sequelize");
+const axios = require('axios');
+require('dotenv').config();
 
 
 module.exports = {
@@ -47,15 +48,13 @@ module.exports = {
       }
 
       const idStr = user.dataValues.id.toString()
-      const chatsList = await db.Chats.findAll({where: { [Op.or]:[{user1Id: idStr}, {userId: idStr}] } });
+      const chatsList = await db.Chats.findAll({ where: { [Op.or]: [{ user1Id: idStr }, { userId: idStr }] } });
 
       let chats = [];
       chatsList.forEach(async chat => {
         let id = chat.dataValues.userId.toString();
-        if (user.dataValues.id.toString() === chat.dataValues.userId.toString() ) id = chat.dataValues.user1Id        
-        console.log(chat.dataValues.userId.toString(), 'userid')
-        const friend = db.User.findOne({ where: {  id:id }})
-        // .then((result) => console.log(result))
+        if (user.dataValues.id.toString() === chat.dataValues.userId.toString()) id = chat.dataValues.user1Id
+        const friend = db.User.findOne({ where: { id: id } })
         chats.push({
           id: chat.dataValues.id,
           userId: chat.dataValues.userId,
@@ -64,10 +63,13 @@ module.exports = {
         });
       })
 
+      const rating = calcRating(user.dataValues.id, db);
+
       user.dataValues.languages = languages;
       user.dataValues.interests = interests;
       user.dataValues.chats = chats;
       user.dataValues.userAlbum = images;
+      user.dataValues.rating = rating;
 
       return user.dataValues;
     },
@@ -126,9 +128,12 @@ module.exports = {
           })
         }
 
+        const rating = calcRating(users[i].dataValues.id, db);
+
         users[i].dataValues.languages = languages;
         users[i].dataValues.interests = interests;
         users[i].dataValues.userAlbum = images;
+        users[i].dataValues.rating = rating;
         returnedUsers.push(users[i].dataValues);
       }
       return returnedUsers
@@ -153,6 +158,39 @@ module.exports = {
     async messages(_, { input }, { db }) {
       const messages = await db.Messages.findAll({ where: { chatId: input.chatId } })
       return messages
+      // get list of photos based on favourite id from input
+      // return messages;
+    },
+    async places(_, { input }, __) {
+      const { lat, lng } = input;
+      const response = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=50000&type=tourist_attraction&key=${process.env.API_KEY}`)
+      let results = await response.data.results;
+      return results;
+    },
+    async reviews(_, { input }, { db }) {
+      const reviews = await db.Reviews.findAll({ where: { id: input.id } })
+
+      // get the info of the users who left the review
+
+      let returnedReviews = [];
+
+      for (let i = 0; i < reviews.length; i++) {
+        const author = await db.User.findOne({ where: { id: reviews[i].dataValues.authorId } })
+
+        returnedReviews.push({
+          id: reviews[i].dataValues.id,
+          rating: reviews[i].dataValues.rating,
+          content: reviews[i].dataValues.content,
+          createdAt: reviews[i].dataValues.createdAt,
+          profile: {
+            id: author.dataValues.id,
+            firstName: author.dataValues.firstName,
+            profileImg: author.dataValues.profileImg
+          }
+        });
+      }
+
+      return returnedReviews;
     }
   },
   Mutation: {
@@ -307,6 +345,27 @@ module.exports = {
       }
       return;
     },
+    async reviews(_, { input }, { db }) {
+      const review = await db.Reviews.create({
+        userId: input.userId,
+        authorId: input.authorId,
+        rating: input.rating,
+        content: input.content
+      })
+
+      const author = await db.User.findOne({ where: { id: input.authorId } })
+
+      return {
+        id: review.dataValues.id,
+        rating: review.dataValues.rating,
+        content: review.dataValues.content,
+        profile: {
+          id: author.dataValues.id,
+          firstName: author.dataValues.firstName,
+          profileImg: author.dataValues.profileImg
+        }
+      }
+    },
     async bulkCreateInterests(_, __, { db }) {
       await db.Interests.bulkCreate([{ name: "Rock-climbing" }, { name: "Skiing" }, { name: "Singing" }, { name: "Cooking" }])
       return;
@@ -316,7 +375,7 @@ module.exports = {
       return;
     }
   },
- 
+
 }
 
 function calculateAgeFromBirthdate(birthdate) {
@@ -334,3 +393,26 @@ function calculateAgeFromBirthdate(birthdate) {
 
   return currentYear - birthYear + postBirthdayInCurrentYear - 1;
 };
+
+async function calcRating(userId, db) {
+  const reviews = await db.Reviews.findAll({ where: { userId: userId } })
+
+  //if a user has no review the default rating is 4
+  if (reviews.length === 0) {
+    return 4;
+  }
+
+  let ratingSum = 0;
+  let ratingCount = 0;
+
+  reviews.forEach(review => {
+    ratingSum += review.dataValues.rating;
+    ratingCount++;
+  })
+
+  const ratingTimes10 = (ratingSum / ratingCount) * 10;
+
+  const ratingToNearest5 = Math.round(ratingTimes10 / 5) * 5;
+
+  return ratingToNearest5 / 10;
+}
