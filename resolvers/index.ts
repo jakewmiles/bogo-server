@@ -54,9 +54,7 @@ module.exports = {
       chatsList.forEach(async chat => {
         let id = chat.dataValues.userId.toString();
         if (user.dataValues.id.toString() === chat.dataValues.userId.toString()) id = chat.dataValues.user1Id
-        console.log(chat.dataValues.userId.toString(), 'userid')
         const friend = db.User.findOne({ where: { id: id } })
-        // .then((result) => console.log(result))
         chats.push({
           id: chat.dataValues.id,
           userId: chat.dataValues.userId,
