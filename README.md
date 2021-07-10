@@ -8,6 +8,9 @@
 - [Technologies](#Technologies)
 
 ## Introduction
+
+<code><img height="400" alt="boGo demo" src="https://user-images.githubusercontent.com/61637775/125164876-5e60b800-e18c-11eb-881f-6cd09f6f85d4.png"></code>
+
 Bogo aims to connect travellers with locals in cities around the world and is fully function on both Android and iOS.
 
 We believe that forging meanful experiences in other cultures is a catalyst for a broad and accepting mindset and aim to shake up the way we travel the world. No other travel app currently takes advantage of the fact that cities are filled with locals you will freely and willingly show people around. With an easy-to-use UI and fluid sign-up process, Bogo is fully accessable to people around the world.
