@@ -23,7 +23,7 @@ The front-end repository can be found [here](https://github.com/jakewmiles/bogo-
 
 ## Getting Started
 
-In order to run matchmaker it is necessary to install and set-up Expo. Please refer to the documentation on the Expo website for further information. This can be run on any Windows or Apple PC. Additionally, postgreSQL is required in order to run the back-end database. 
+In order to run Bogo it is necessary to install and set-up Expo. Please refer to the documentation on the Expo website for further information. This can be run on any Windows or Apple PC. Additionally, postgreSQL is required in order to run the back-end database. 
 
 1. Clone this repo and enter!
 
@@ -53,11 +53,6 @@ In order to run matchmaker it is necessary to install and set-up Expo. Please re
 
 ## Features
 
-- Users login through a local account or through Facebook
-- View and add new friends
-- Make a match between two existing friends
-- View all matches that have been made for the user
-- Chat with all matches
 - Login through a local account
 - Register using the user sign-up journey 
 - Browse and filter local guides around the world
